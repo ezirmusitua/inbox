@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+  width: 2px;
+  background: rgba(2, 4, 32, 0.08);
+}
+
+html {
+  font-size: 14px;
+}
+
+div {
+  box-sizing: border-box;
+}

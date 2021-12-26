@@ -1,0 +1,1 @@
+export type tMsgPort = chrome.runtime.Port;

@@ -1,0 +1,22 @@
+<html>
+
+<head>
+    <script src="/index.js"></script>
+    <script>
+        function send_message() {
+            const msg = {
+                type: "tab_to_content",
+                data: "hello world"
+            };
+            communicate(msg)
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Hello World</h1>
+    <p>This is a sample page</p>
+    <button onclick="send_message()">Send Message</button>
+</body>
+
+</html>

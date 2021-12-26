@@ -1,0 +1,34 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "outDir": "./build",
+    "paths": {
+      "@logseq_inbox/proxy": [
+        "../proxy/lib"
+      ],
+      "@logseq_inbox/shared": [
+        "../shared/lib"
+      ]
+    }
+  },
+  "include": [
+    "lib"
+  ],
+  "exclude": [
+    "build",
+    "node_modules"
+  ],
+  "references": [
+    {
+      "path": "../proxy"
+    },
+    {
+      "path": "../shared"
+    }
+  ]
+}
