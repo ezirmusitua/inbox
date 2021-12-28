@@ -29,7 +29,7 @@ export class PopMessageHandler {
       console.log("[Extension] error");
       port.postMessage({
         type: "error",
-        data: { code: eErrorCode.ERROR_CODE },
+        data: { code: eErrorCode.UNKNOWN },
       });
     }
   }

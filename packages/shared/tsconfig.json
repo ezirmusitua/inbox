@@ -4,5 +4,12 @@
     "composite": true,
     "declaration": true,
     "outDir": "./dist"
-  }
+  },
+  "watchOptions": {
+    "watchDirectory": "usefsevents",
+    "excludeDirectories": [
+      "**/node_modules",
+      "dist"
+    ],
+  },
 }

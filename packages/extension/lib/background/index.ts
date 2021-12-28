@@ -18,9 +18,14 @@ const handlers = {
   [CONNECTION_NAME.POP]: new PopMessageHandler(repo),
 };
 
+console.log(1);
+
 chrome.runtime.onConnect.addListener(async (port) => {
+  console.log(2, port);
   if (!allowed_connection.includes(port.name)) return;
   port.postMessage({ type: "connected" });
+  console.log("send start_reading_mode event");
+  port.postMessage({ type: "start_reading_mode" });
   port.onMessage.addListener((m, p) => {
     handlers[port.name].handle(m, p);
   });

@@ -38,6 +38,6 @@
 		"rust": "1.55"
 	},
 	"mounts": [
-		"source=/Users/jz/Workspace/private/kccount/extension/dist,target=/dist/kccount/extension,type=bind,consistency=cached"
+		"source=/Users/jz/Workspace/private/logseq_inbox/extension/dist,target=/dist/logseq_inbox/extension,type=bind,consistency=cached"
 	]
 }

@@ -1,3 +1,4 @@
 export enum eErrorCode {
-    ERROR_CODE,
+    CONTENT_REGISTER_FAILED,
+    UNKNOWN = 999,
 }

@@ -3,7 +3,7 @@
 	"version": "0.4.0",
 	"description": "",
 	"author": "ezirmusitua <jferroal@gmail.com>",
-	"homepage": "https://github.com/ezirmusitua/logseq_inbox#readme",
+	"homepage": "https://github.com/ezirmusitua/logseq-inbox#readme",
 	"license": "UNLICENSED",
 	"main": "lib/extension.js",
 	"directories": {
@@ -15,10 +15,10 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/ezirmusitua/logseq_inbox.git"
+		"url": "git+https://github.com/ezirmusitua/logseq-inbox.git"
 	},
 	"bugs": {
-		"url": "https://github.com/ezirmusitua/logseq_inbox/issues"
+		"url": "https://github.com/ezirmusitua/logseq-inbox/issues"
 	},
 	"devDependencies": {
 		"@logseq_inbox/proxy": "^0.1.0",
@@ -49,13 +49,13 @@
 	},
 	"dependencies": {
 		"@headlessui/react": "^1.4.2",
+		"@logseq_inbox/shared": "^0.1.0",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2"
 	},
 	"scripts": {
 		"build": "NODE_ENV=production webpack build",
-		"dev": "webpack serve --open",
-		"watch": "webpack watch"
+		"dev": "webpack watch"
 	},
 	"targets": {
 		"main": false

@@ -1,9 +1,9 @@
 {
-	"name": "@extension/proxy",
+	"name": "@logseq_inbox/proxy",
 	"version": "0.1.0",
 	"description": "",
 	"author": "ezirmusitua <jferroal@gmail.com>",
-	"homepage": "https://github.com/ezirmusitua/logseq_inbox#readme",
+	"homepage": "https://github.com/ezirmusitua/logseq-inbox#readme",
 	"license": "ISC",
 	"main": "dist/lib/index.js",
 	"directories": {
@@ -11,17 +11,18 @@
 		"test": "__tests__"
 	},
 	"scripts": {
-		"build": "tsc -b"
+		"build": "tsc -b",
+		"dev": "tsc -b --watch"
 	},
 	"files": [
 		"lib"
 	],
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/ezirmusitua/logseq_inbox.git"
+		"url": "git+https://github.com/ezirmusitua/logseq-inbox.git"
 	},
 	"bugs": {
-		"url": "https://github.com/ezirmusitua/logseq_inbox/issues"
+		"url": "https://github.com/ezirmusitua/logseq-inbox/issues"
 	},
 	"dependencies": {
 		"@logseq_inbox/shared": "^0.1.0"

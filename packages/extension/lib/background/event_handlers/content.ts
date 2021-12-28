@@ -32,13 +32,13 @@ export class ContentMessageHandler {
 
   async handle_content_event(msg: iMsg, port: tMsgPort, compress = true) {
     try {
-      action(); 
+      action();
       port.postMessage({ type: "content_event", data: {} });
     } catch {
       console.log("[Extension] error");
       port.postMessage({
         type: "error",
-        data: { code: eErrorCode.ERROR_CODE },
+        data: { code: eErrorCode.UNKNOWN },
       });
     }
     return;

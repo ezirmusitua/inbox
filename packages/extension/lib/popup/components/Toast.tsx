@@ -1,16 +1,17 @@
 import { useContext, useEffect } from "react";
 import Context from "../context";
-import { eErrorCode } from "@logseq_inbox/shared"
+import { eErrorCode } from "@logseq_inbox/shared";
+import { Transition } from "@headlessui/react";
 
 interface iErrorMsg {
   type: "error";
   data: { code: eErrorCode };
 }
 
-export function show_error(dispatch: any, code: string) {
+export function show_error(dispatch: any, code: eErrorCode) {
   dispatch({ type: "select_error_msg", payload: code });
   let t = setTimeout(() => {
-    dispatch({ type: "select_error_msg", payload: eErrorCode.ERROR_CODE });
+    dispatch({ type: "select_error_msg", payload: eErrorCode.UNKNOWN });
     clearTimeout(t);
     t = null as any;
   }, 2000);

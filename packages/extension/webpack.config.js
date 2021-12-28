@@ -91,11 +91,11 @@ module.exports = {
         }),
     ],
     output: {
-        path: path.resolve('/dist', 'kccount', 'extension'),
+        path: path.resolve('/dist', 'logseq_inbox', 'extension'),
         clean: true
     },
     devServer: {
-        static: "/dist/kccount/extension"
+        static: "/dist/logseq_inbox/extension"
     },
     experiments: {
         asyncWebAssembly: true,

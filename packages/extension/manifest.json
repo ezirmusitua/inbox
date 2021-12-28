@@ -1,20 +1,20 @@
 {
   "version": "0.1.0",
   "manifest_version": 3,
-  "name": "Chrome Extension",
+  "name": "Logseq Inbox",
   "options_page": "./options/index.html",
   "background": {
     "service_worker": "./background/background.js"
   },
   "action": {
     "default_popup": "./popup/index.html",
-    "default_icon": "./assets/icon-34.png"
+    "default_icon": "./assets/logo/1024.png"
   },
   "chrome_url_overrides": {
     "newtab": "./newtab/index.html"
   },
   "icons": {
-    "128": "./assets/icon-128.png"
+    "128": "./assets/logo/1024.png"
   },
   "permissions": [
     "storage",
@@ -38,8 +38,12 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "./assets/icon-128.png",
-        "./assets/icon-34.png"
+        "./assets/logo/res/mipmap-anydpi-v26/logseq_inbox.png",
+        "./assets/logo/res/mipmap-hdpi/logseq_inbox.png",
+        "./assets/logo/res/mipmap-mdpi/logseq_inbox.png",
+        "./assets/logo/res/mipmap-xhdpi/logseq_inbox.png",
+        "./assets/logo/res/mipmap-xxhdpi/logseq_inbox.png",
+        "./assets/logo/res/mipmap-xxxhdpi/logseq_inbox.png"
       ],
       "matches": []
     }
