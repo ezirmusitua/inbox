@@ -16,13 +16,9 @@ class ContentScript {
   private _event_handler: EventHandler = null as any;
 
   register(event_handler: EventHandler) {
-    console.log("content 1");
     this.init_tab_comm_elem();
-    console.log("content 2");
     this.connect_to_bg();
-    console.log("content 3");
     this.start_forward_bg_msg();
-    console.log("content 4");
     this._event_handler = event_handler;
   }
 
