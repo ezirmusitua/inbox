@@ -1,32 +1,5 @@
-export type tRegex = string;
-export type tCSSString = string;
-const ORIGIN_CONTAINER_CLS_NAME = "__reading_mode-origin_container";
-export interface iElement {
-  selector: string;
-}
-
-export interface iReservedElement extends iElement {
-  new_selector: string;
-  selector: string;
-}
-
-export interface iReadingModelRule {
-  id: string;
-  name: string;
-  description: string;
-  url_pattern: tRegex;
-  removed: iElement[];
-  reserved: iReservedElement[];
-  css: tCSSString[];
-}
-
-export class ReadingModeRule {
-  constructor(private readonly _data: ReadingModeRule) {}
-}
-
-export interface iReadingMode {
-  apply(rule: iReadingModelRule): void;
-}
+import { ORIGIN_CONTAINER_CLS_NAME } from "./constant";
+import { iReadingMode, iReadingModeDef } from "./interface";
 
 export class ReadingMode implements iReadingMode {
   static instance: ReadingMode = null as any;
@@ -41,9 +14,9 @@ export class ReadingMode implements iReadingMode {
     return ReadingMode.instance;
   }
 
-  apply(rule: iReadingModelRule) {
+  apply(definition: iReadingModeDef) {
     if (!this._body) return;
-    const { removed, reserved, css } = rule;
+    const { removed, reserved, css } = definition;
     const cloned = this._origin_container.cloneNode(true) as Element;
     for (const { selector } of removed) {
       const elem = cloned.querySelector(selector);
@@ -53,7 +26,7 @@ export class ReadingMode implements iReadingMode {
       }
     }
     const mode_container = document.createElement("section");
-    const mode_class = `__reading_mode-${rule.name}-container`;
+    const mode_class = `__reading_mode-${definition.id}-container`;
     mode_container.setAttribute("class", mode_class);
     for (const { selector, new_selector } of reserved) {
       const elem = cloned.querySelector(selector);
@@ -85,6 +58,7 @@ export class ReadingMode implements iReadingMode {
       this._origin_container = document.createElement("section");
       this._origin_container.setAttribute("class", ORIGIN_CONTAINER_CLS_NAME);
       Array.from(this._body.children).forEach((elem) => {
+        console.log("element to copy: ", elem);
         if (!["script", "style"].includes(elem.nodeName.toLowerCase())) {
           this._origin_container.append(elem);
         }

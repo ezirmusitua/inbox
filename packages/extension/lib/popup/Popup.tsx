@@ -22,7 +22,7 @@ export default function Popup() {
         console.log('pop up connected to background')
         break;
       case "pop_event":
-        service.do_something();
+        // do something
         console.log("received event", msg);
         break;
     }

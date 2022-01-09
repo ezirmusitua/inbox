@@ -2,9 +2,9 @@ import {
   CONNECTION_NAME,
   EXTENSION_CONTENT_BTN_ID,
 } from "@logseq_inbox/shared";
+import api from "./domain/api";
 import { EventHandler } from "./event";
-
-console.log("content ", 0);
+import mount_view from "./page";
 
 class ContentScript {
   private _state = {
@@ -20,6 +20,10 @@ class ContentScript {
     this.connect_to_bg();
     this.start_forward_bg_msg();
     this._event_handler = event_handler;
+  }
+
+  mount_view(_api: Record<string, any>) {
+    mount_view(_api);
   }
 
   connect_to_bg() {
@@ -79,7 +83,6 @@ class ContentScript {
         this._event_handler._state = this._state;
         return;
       }
-
       const should_forward = this._event_handler.handle(msg);
       if (should_forward) {
         window.postMessage(msg, "*");
@@ -91,6 +94,7 @@ class ContentScript {
 try {
   const cs = new ContentScript();
   cs.register(new EventHandler());
+  cs.mount_view(api);
 } catch (e) {
   console.log("content -1: ", e);
 }
