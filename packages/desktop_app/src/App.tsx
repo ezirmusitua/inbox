@@ -1,10 +1,14 @@
-import React from 'react'
+import { dialog, fs } from "@tauri-apps/api"
+import './App.css'
 import logo from './logo.svg'
 import tauriCircles from './tauri.svg'
 import tauriWord from './wordmark.svg'
-import './App.css'
 
 function App() {
+  async function select_file() {
+    const file = await dialog.open();
+    const content = await fs.readTextFile(file as string)
+  }
   return (
     <div className="App">
       <header className="App-header">
@@ -29,7 +33,7 @@ function App() {
         >
           Learn React
         </a>
-        <p>
+        <p onClick={select_file}>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
       </header>
