@@ -39,6 +39,7 @@
 		"rust": "latest"
 	},
 	"mounts": [
-		"source=/Users/jz/Workspace/private/logseq_inbox/extension/dist,target=/dist/logseq_inbox/extension,type=bind,consistency=cached"
+		"source=/Users/jz/Workspace/private/logseq_inbox/extension/dist,target=/dist/logseq_inbox/extension,type=bind,consistency=cached",
+		"source=/Users/jz/Workspace/private/logseq_inbox/desktop_app,target=/dist/logseq_inbox/desktop_app,type=bind,consistency=cached"
 	]
 }
