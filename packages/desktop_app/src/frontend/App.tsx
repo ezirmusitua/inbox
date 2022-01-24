@@ -1,32 +1,12 @@
 import { dialog, fs } from "@tauri-apps/api";
 import { useEffect, useReducer } from "react";
+import { Route, Routes } from "react-router-dom";
 import { InitSettingDto } from "shared/setting";
 import "./App.css";
-import logo from "./assets/logo.svg";
-import tauriCircles from "./assets/tauri.svg";
-import tauriWord from "./assets/wordmark.svg";
+import { init_state, reducer } from "./App.store";
+import HomePage from "./pages/Home";
+import SettingPage from "./pages/Setting";
 import { setting_ctrl } from "./resource";
-
-interface iState {
-    db_data: any;
-}
-
-interface iAction {
-    type: string;
-    payload: any;
-}
-
-const init_state: iState = {
-    db_data: {},
-};
-
-function reducer(state: iState, action: iAction) {
-    switch (action.type) {
-        case "set_db_data":
-            return { ...state, db_data: action.payload };
-    }
-    return { ...state };
-}
 
 function App() {
     const [state, dispatch] = useReducer(reducer, init_state);
@@ -54,12 +34,9 @@ function App() {
     }, []);
 
     async function select_file() {
-        console.log(state.db_data);
         const dir_path = await dialog.open({ directory: true });
-        console.log("to write: ", dir_path);
         const target_path = `${dir_path}/202201231212.md`;
         try {
-            console.log("to write: ", target_path);
             await fs.writeFile({
                 path: target_path,
                 contents: `- hello world`,
@@ -72,40 +49,13 @@ function App() {
 
     return (
         <div className="App">
-            <header className="App-header">
-                <div className="inline-logo">
-                    <img
-                        src={tauriCircles}
-                        className="App-logo rotate"
-                        alt="logo"
-                    />
-                    <img
-                        src={tauriWord}
-                        className="App-logo smaller"
-                        alt="logo"
-                    />
-                </div>
-                <a
-                    className="App-link"
-                    href="https://tauri.studio"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    {state.db_data._updated_at}
-                </a>
-                <img src={logo} className="App-logo rotate" alt="logo" />
-                <a
-                    className="App-link"
-                    href="https://reactjs.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Learn React
-                </a>
-                <p onClick={select_file}>
-                    Edit <code>src/App.tsx</code> and save to reload.
-                </p>
-            </header>
+            <Routes>
+                <Route path="/" element={<HomePage></HomePage>}></Route>
+                <Route
+                    path="/setting"
+                    element={<SettingPage></SettingPage>}
+                ></Route>
+            </Routes>
         </div>
     );
 }
