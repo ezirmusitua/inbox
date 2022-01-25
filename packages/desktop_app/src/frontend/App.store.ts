@@ -1,5 +1,8 @@
+import { createContext } from "react";
+
 export interface iState {
-    db_data: any;
+    setting: any;
+    initialized: boolean;
 }
 
 export interface iAction {
@@ -8,13 +11,26 @@ export interface iAction {
 }
 
 export const init_state: iState = {
-    db_data: {},
+    setting: {},
+    initialized: false,
 };
 
 export function reducer(state: iState, action: iAction) {
     switch (action.type) {
-        case "set_db_data":
-            return { ...state, db_data: action.payload };
+        case "set_setting":
+            return { ...state, setting: action.payload };
+        case "set_initialized":
+            return { ...state, initialized: action.payload };
     }
     return { ...state };
 }
+
+export interface iAppContextValue {
+    state: iState;
+    dispatch: React.Dispatch<iAction>;
+}
+
+export const AppContext = createContext({
+    state: init_state,
+    dispatch: (action: iAction) => {},
+});

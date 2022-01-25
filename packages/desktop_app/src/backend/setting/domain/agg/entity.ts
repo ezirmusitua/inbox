@@ -8,6 +8,16 @@ export class SettingEntity {
         return this._data.logseq_root;
     }
 
+    get today_path() {
+        const now = new Date();
+        const year_str = now.getFullYear() + "";
+        const month = now.getMonth() + 1;
+        const month_str = month < 10 ? "0" + month : month + "";
+        const day = now.getDate();
+        const day_str = day < 10 ? "0" + day : day + "";
+        return `${this.logseq_root}${path.sep}${year_str}_${month_str}_${day_str}-信息列表.md`;
+    }
+
     update_setting(setting: iAppSetting) {
         this._data.logseq_root = setting.logseq_root;
         this._data._update_at = new Date();
@@ -24,7 +34,7 @@ export class SettingEntity {
 
     static async get_setting_root() {
         const base = await path.documentDir();
-        const target = `${base}/.logseq_box`;
+        const target = `${base}${path.sep}.logseq_box`;
         try {
             await fs.readDir(target);
         } catch (e) {
@@ -35,7 +45,7 @@ export class SettingEntity {
 
     static async get_setting_path() {
         const setting_root = await this.get_setting_root();
-        const setting_path = `${setting_root}/setting.json`;
+        const setting_path = `${setting_root}${path.sep}setting.json`;
         return setting_path;
     }
 

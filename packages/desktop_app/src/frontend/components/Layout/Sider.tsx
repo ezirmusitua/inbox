@@ -1,19 +1,26 @@
-import { Link, NavLink, useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Routes = [
-    { label: "Home", path: "/" },
-    { label: "Setting", path: "/setting" },
+    { label: "信息列表", path: "/" },
+    { label: "设置", path: "/setting" },
 ];
+
+export const SIDER_WIDTH = 240;
 
 export default function Sider() {
     return (
-        <nav className="flex flex-col fixed left-0 w-60 shadow-md border-r border-gray-200 h-screen py-8">
+        <nav
+            style={{ width: `${SIDER_WIDTH}px` }}
+            className="bg-white flex flex-col fixed left-0 shadow-md border-r border-gray-200 h-screen py-8"
+        >
             {Routes.map(({ label, path }, index) => (
                 <NavLink
                     key={index}
                     to={path}
                     className={({ isActive }: any) =>
-                        `py-2 ${isActive ? "border-r-2 border-blue-400" : ""}`
+                        `px-16 py-2 ${
+                            isActive ? "border-r-4 border-blue-400" : ""
+                        }`
                     }
                 >
                     {label}

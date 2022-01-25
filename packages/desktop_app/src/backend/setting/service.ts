@@ -21,5 +21,9 @@ export class SettingService {
         return entity.save_setting();
     }
 
+    static async get_setting() {
+        return SettingEntity.read_setting();
+    }
+
     static update_setting() {}
 }
