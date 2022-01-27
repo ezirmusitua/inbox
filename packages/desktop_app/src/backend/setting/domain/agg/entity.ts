@@ -8,14 +8,30 @@ export class SettingEntity {
         return this._data.logseq_root;
     }
 
-    get today_path() {
-        const now = new Date();
-        const year_str = now.getFullYear() + "";
-        const month = now.getMonth() + 1;
+    concat_day_path(dt: Date) {
+        const year_str = dt.getFullYear() + "";
+        const month = dt.getMonth() + 1;
         const month_str = month < 10 ? "0" + month : month + "";
-        const day = now.getDate();
+        const day = dt.getDate();
         const day_str = day < 10 ? "0" + day : day + "";
         return `${this.logseq_root}${path.sep}${year_str}_${month_str}_${day_str}-信息列表.md`;
+    }
+
+    get today_path() {
+        const now = new Date();
+        return this.concat_day_path(now);
+    }
+
+    get summary_path() {
+        return `${this.logseq_root}${path.sep}汇总信息列表.md`;
+    }
+
+    async get_all_path() {
+        const file = await fs.readDir(this.logseq_root);
+        const article_file = file.filter(
+            (f) => !f.children && f.name && f.name.endsWith("信息列表.md"),
+        );
+        return article_file.map((f) => f.path);
     }
 
     update_setting(setting: iAppSetting) {

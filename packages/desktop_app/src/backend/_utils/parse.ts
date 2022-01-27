@@ -17,3 +17,15 @@ export function parse_indent(content: string) {
     }
     return root;
 }
+
+// TODO: support unlimited depth
+export function join_indent(_data: Array<Record<string, any>>) {
+    let out = "";
+    for (const item of _data) {
+        out += `- ${item.content}${os.EOL}`;
+        for (const child of item.children) {
+            out += `\t- ${child}${os.EOL}`;
+        }
+    }
+    return out;
+}

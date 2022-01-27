@@ -1,7 +1,8 @@
 import { NavLink } from "react-router-dom";
 
 const Routes = [
-    { label: "信息列表", path: "/" },
+    { label: "今日", path: "/" },
+    { label: "汇总", path: "/article" },
     { label: "设置", path: "/setting" },
 ];
 

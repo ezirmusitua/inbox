@@ -2,8 +2,9 @@ import { useEffect, useReducer } from "react";
 import { Route, Routes } from "react-router-dom";
 import AppAction from "./App.action";
 import { AppContext, init_state, reducer } from "./App.store";
-import HomePage from "./pages/Home";
+import TodayPage from "./pages/Today";
 import SettingPage from "./pages/Setting";
+import ArticlePage from "./pages/Article";
 
 function App() {
     const [state, dispatch] = useReducer(reducer, init_state);
@@ -20,7 +21,11 @@ function App() {
                         <Routes>
                             <Route
                                 path="/"
-                                element={<HomePage></HomePage>}
+                                element={<TodayPage></TodayPage>}
+                            ></Route>
+                            <Route
+                                path="/article"
+                                element={<ArticlePage></ArticlePage>}
                             ></Route>
                             <Route
                                 path="/setting"
