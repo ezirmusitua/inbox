@@ -1,4 +1,4 @@
-import { eErrorCode } from "@logseq_inbox/shared";
+import { eErrorCode } from "@inbox/shared";
 export interface iState {
   connection: any;
   error: string;

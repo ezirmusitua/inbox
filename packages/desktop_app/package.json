@@ -1,5 +1,5 @@
 {
-  "name": "@logseq_inbox/desktop_app",
+  "name": "@inbox/desktop_app",
   "version": "0.2.0",
   "private": true,
   "main": "src/index.tsx",
@@ -28,7 +28,7 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "dev:desktop": "node wc.js ./src-tauri /dist/logseq_inbox/desktop_app/",
+    "dev:desktop": "node wc.js ./src-tauri /private_workspaces/inbox/desktop_app/",
     "dev:web": "react-scripts start",
     "start": "react-scripts start",
     "build": "react-scripts build",

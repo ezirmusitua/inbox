@@ -1,4 +1,4 @@
-import { CONNECTION_NAME } from "@logseq_inbox/shared";
+import { CONNECTION_NAME } from "@inbox/shared";
 import { ContextMenu } from "./context_menus";
 import { ContentMessageHandler, PopMessageHandler } from "./event_handlers";
 import Repo from "./repo";

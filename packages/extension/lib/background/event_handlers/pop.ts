@@ -1,4 +1,4 @@
-import { eErrorCode, iMsg } from "@logseq_inbox/shared";
+import { eErrorCode, iMsg } from "@inbox/shared";
 import { action } from "../actions";
 import { ContextMenu } from "../context_menus";
 import Repo from "../repo";

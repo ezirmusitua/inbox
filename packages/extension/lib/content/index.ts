@@ -1,7 +1,7 @@
 import {
   CONNECTION_NAME,
   EXTENSION_CONTENT_BTN_ID,
-} from "@logseq_inbox/shared";
+} from "@inbox/shared";
 import api from "./domain/api";
 import { EventHandler } from "./event";
 import mount_view from "./page";

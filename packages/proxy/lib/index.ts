@@ -2,7 +2,7 @@ import {
     eErrorCode,
     EXTENSION_CONTENT_BTN_ID,
     iMsg,
-} from "@logseq_inbox/shared";
+} from "@inbox/shared";
 
 export async function check_extension_installed(max_retry = 10) {
     function _check_installed() {

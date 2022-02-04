@@ -91,11 +91,11 @@ module.exports = {
         }),
     ],
     output: {
-        path: path.resolve('/dist', 'logseq_inbox', 'extension'),
+        path: path.resolve('/private_workspaces', 'inbox', 'extension', 'dist'),
         clean: true
     },
     devServer: {
-        static: "/dist/logseq_inbox/extension"
+        static: "/private_workspaces/inbox/extension/dist"
     },
     experiments: {
         asyncWebAssembly: true,

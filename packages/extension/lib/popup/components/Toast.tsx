@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import Context from "../context";
-import { eErrorCode } from "@logseq_inbox/shared";
+import { eErrorCode } from "@inbox/shared";
 import { Transition } from "@headlessui/react";
 
 interface iErrorMsg {

@@ -1,5 +1,5 @@
 {
-  "name": "@logseq_inbox/logseq_inbox",
+  "name": "@inbox/inbox",
   "version": "0.2.0",
   "private": true,
   "workspaces": [

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import * as extension from "@logseq_inbox/proxy";
+import * as extension from "@inbox/proxy";
 
 export default function Home() {
     const [extension_proxy, set_extension_proxy] = useState(null as any);

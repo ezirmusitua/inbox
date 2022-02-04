@@ -1,5 +1,5 @@
 {
-	"name": "@logseq_inbox/proxy",
+	"name": "@inbox/proxy",
 	"version": "0.2.0",
 	"description": "",
 	"author": "ezirmusitua <jferroal@gmail.com>",
@@ -25,7 +25,7 @@
 		"url": "https://github.com/ezirmusitua/logseq-inbox/issues"
 	},
 	"dependencies": {
-		"@logseq_inbox/shared": "^0.2.0"
+		"@inbox/shared": "^0.2.0"
 	},
 	"devDependencies": {
 		"typescript": "^4.5.2"

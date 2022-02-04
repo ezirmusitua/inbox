@@ -8,10 +8,10 @@
     ],
     "outDir": "./build",
     "paths": {
-      "@logseq_inbox/proxy": [
+      "@inbox/proxy": [
         "../proxy/lib"
       ],
-      "@logseq_inbox/shared": [
+      "@inbox/shared": [
         "../shared/lib"
       ]
     }

@@ -5,7 +5,7 @@
     "declaration": true,
     "outDir": "./dist",
     "paths": {
-      "@logseq_inbox/shared": [
+      "@inbox/shared": [
         "../shared/lib"
       ]
     }

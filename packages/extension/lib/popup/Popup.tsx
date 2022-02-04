@@ -1,4 +1,4 @@
-import { CONNECTION_NAME } from "@logseq_inbox/shared";
+import { CONNECTION_NAME } from "@inbox/shared";
 import { useEffect, useReducer } from "react";
 import Container, { ContentContainer } from "./components/Container";
 import ErrorToast from "./components/Toast";

@@ -1,4 +1,4 @@
-import { iMsg } from "@logseq_inbox/shared";
+import { iMsg } from "@inbox/shared";
 import { ReadingMode } from "./domain/reading_mode";
 import ReadingModeList from "./domain/reading_mode_list";
 
