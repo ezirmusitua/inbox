@@ -17,7 +17,6 @@ function watch_and_copy() {
   watcher.on("add", (fp) => {
     const fdp = path.join(to, fp);
     console.log("copy ", fp, fdp)
-
     fse.ensureDirSync(path.dirname(fdp))
     if (fse.statSync(fp).isDirectory()) {
       fse.copySync(fp, fdp, { overwrite: true })

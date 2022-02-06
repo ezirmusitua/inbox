@@ -1,0 +1,13 @@
+{
+  "files.watcherInclude": [
+    "/workspaces/inbox",
+  ],
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/*/**": true,
+    "**/.hg/store/**": true,
+    "**/dist/**": true,
+    "**/binaries/**": true,
+  }
+}

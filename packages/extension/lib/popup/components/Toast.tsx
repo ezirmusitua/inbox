@@ -23,7 +23,6 @@ function ErrorToast() {
     state: { connection, error: msg },
     dispatch,
   } = ctx;
-  if (!connection) return null;
   function handle_error(msg: iErrorMsg) {
     if (msg.type !== "error") return;
     show_error(dispatch, msg.data.code);
@@ -34,6 +33,7 @@ function ErrorToast() {
       connection.onMessage.removeListener(handle_error);
     };
   }, []);
+  if (!connection) return null;
   return (
     <Transition
       show={!!msg}

@@ -3,7 +3,7 @@
   "compilerOptions": {
     "composite": true,
     "declaration": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
   },
   "watchOptions": {
     "watchDirectory": "usefsevents",

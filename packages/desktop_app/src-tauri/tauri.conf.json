@@ -12,6 +12,9 @@
   "tauri": {
     "bundle": {
       "active": true,
+      "externalBin": [
+        "binaries/app"
+      ],
       "targets": "all",
       "identifier": "com.tauri.dev",
       "icon": [
@@ -22,7 +25,6 @@
         "icons/icon.ico"
       ],
       "resources": [],
-      "externalBin": [],
       "copyright": "",
       "category": "DeveloperTool",
       "shortDescription": "",
@@ -55,6 +57,9 @@
       },
       "dialog": {
         "all": true
+      },
+      "shell": {
+        "execute": true
       }
     },
     "windows": [

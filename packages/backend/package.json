@@ -1,0 +1,115 @@
+{
+  "name": "@inbox/backend",
+  "version": "0.2.0",
+  "description": "",
+  "author": "jferroal@gmail.com",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "nest start --watch",
+    "prebuild": "rimraf dist",
+    "package:macos:arm64": "pkg package.json --target node14-macos-arm64 --output ../desktop_app/src-tauri/binaries/app && node scripts/move_binary.js macos:arm64",
+    "package:macos:x64": "pkg package.json --target node14-macos-x64 --output ../desktop_app/src-tauri/binaries/app && node scripts/move_binary.js macos:x64",
+    "package:linux:arm64": "pkg package.json --target node14-linux-arm64 --output ../desktop_app/src-tauri/binaries/app && node scripts/move_binary.js linux:arm64",
+    "package:linux:x64": "pkg package.json --target node14-linux-x64 --output ../desktop_app/src-tauri/binaries/app && node scripts/move_binary.js linux:x64",
+    "package:windows:arm64": "pkg package.json --target node14-win-arm64 --output ../desktop_app/src-tauri/binaries/app && node scripts/move_binary.js win:arm64",
+    "package:windows:x64": "pkg package.json --target node14-win-x64 --output ../desktop_app/src-tauri/binaries/app && node scripts/move_binary.js win:x64",
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/src/main",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json"
+  },
+  "dependencies": {
+    "@inbox/shared": "^0.2.0",
+    "@nestjs/common": "^8.0.0",
+    "@nestjs/core": "^8.0.0",
+    "@nestjs/jwt": "^8.0.0",
+    "@nestjs/passport": "^8.0.1",
+    "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/schedule": "^1.0.2",
+    "@nestjs/typeorm": "^8.0.2",
+    "axios": "^0.24.0",
+    "better-sqlite3": "^7.5.0",
+    "dotenv": "^16.0.0",
+    "luxon": "^2.3.0",
+    "passport": "^0.5.2",
+    "passport-jwt": "^4.0.0",
+    "passport-strategy": "^1.0.0",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
+    "rxjs": "^7.2.0",
+    "typeorm": "^0.2.41"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^8.0.0",
+    "@nestjs/config": "^1.1.5",
+    "@nestjs/schematics": "^8.0.0",
+    "@nestjs/swagger": "^5.1.5",
+    "@nestjs/testing": "^8.0.0",
+    "@types/cron": "^1.7.3",
+    "@types/express": "^4.17.13",
+    "@types/jest": "27.0.2",
+    "@types/luxon": "^2.0.9",
+    "@types/multer": "^1.4.7",
+    "@types/node": "^14.0.0",
+    "@types/passport-jwt": "^3.0.6",
+    "@types/passport-strategy": "^0.2.35",
+    "@types/supertest": "^2.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.2.5",
+    "pkg": "^5.5.2",
+    "prettier": "^2.3.2",
+    "source-map-support": "^0.5.20",
+    "supertest": "^6.1.3",
+    "swagger-ui-express": "^4.3.0",
+    "ts-jest": "^27.0.3",
+    "ts-loader": "^9.2.3",
+    "ts-node": "^10.0.0",
+    "tsconfig-paths": "^3.10.1",
+    "typescript": "^4.3.5"
+  },
+  "main": "dist/main.js",
+  "directories": {
+    "lib": "src",
+    "test": "test"
+  },
+  "files": [
+    "src"
+  ],
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  },
+  "bin": "dist/main.js",
+  "pkg": {
+    "assets": [
+      "dist/**/*",
+      ".env"
+    ]
+  }
+}
