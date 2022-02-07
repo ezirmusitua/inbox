@@ -1,7 +1,0 @@
-NODE_ENV=dev
-port=3002
-host=0.0.0.0
-db_type=better-sqlite3
-db_database=./dev_db
-jwt_secret=secret
-jwt_expires=30d

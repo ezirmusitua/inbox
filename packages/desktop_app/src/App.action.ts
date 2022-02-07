@@ -1,22 +1,27 @@
-import { InitSettingDto } from "@inbox/shared";
 import { dialog } from "@tauri-apps/api";
+import backend from "backend";
 import { iAppContextValue } from "./App.store";
-import { setting } from "./resource";
 
 export default class AppAction {
     constructor(private readonly ctx: iAppContextValue) {}
 
     async init_app() {
-        const resp = await setting.check_initialized();
-        if (resp.data) return;
-        // eslint-disable-next-line
-        const yes = confirm("初次使用请先设置 logseq 库位置");
-        if (!yes) {
-            alert("请先设置 logseq 库位置");
-            return;
+        let backend_config = await backend.check_initialized();
+        if (!backend_config) {
+            // eslint-disable-next-line
+            const yes = confirm("初次使用请先设置 logseq 库位置");
+            if (!yes) {
+                alert("请先设置 logseq 库位置");
+                return;
+            }
+            const dto = await backend.prepare_initialization_dto();
+            dto.logseq.root = (await dialog.open({
+                directory: true,
+            })) as string;
+            backend_config = dto.backend;
         }
-        const dir_path = await dialog.open({ directory: true });
-        await setting.init_setting(new InitSettingDto(dir_path as string));
+        await backend.start_backend(backend_config);
+        // await backend.init_setting(dto);
     }
 
     async init() {

@@ -6,7 +6,7 @@ export class SettingEntity {
   constructor(private readonly _data: iAppSetting) {}
 
   get logseq_root() {
-    return this._data.logseq_root;
+    return this._data.logseq.root;
   }
 
   concat_day_path(dt: Date) {
@@ -36,7 +36,10 @@ export class SettingEntity {
   }
 
   update_setting(setting: iAppSetting) {
-    this._data.logseq_root = setting.logseq_root;
+    this._data.logseq = setting.logseq;
+    this._data.backend = setting.backend;
+    this._data.app = setting.app;
+    this._data.device = setting.device;
     this._data._update_at = new Date();
     this._data._version = (this._data._version || 0) + 1;
   }

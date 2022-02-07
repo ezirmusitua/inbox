@@ -5,10 +5,7 @@ import { SettingEntity } from "./domain/agg/entity";
 @Injectable()
 export class SettingService {
   init_setting(dto: InitSettingDto) {
-    const entity = new SettingEntity({
-      logseq_root: dto.logseq_root,
-      _created_at: new Date(),
-    });
+    const entity = new SettingEntity(dto);
     return entity.save_setting();
   }
 

@@ -8,12 +8,12 @@
   "scripts": {
     "dev": "nest start --watch",
     "prebuild": "rimraf dist",
-    "package:macos:arm64": "pkg package.json --target node14-macos-arm64 --output ../desktop_app/src-tauri/binaries/app && node scripts/move_binary.js macos:arm64",
-    "package:macos:x64": "pkg package.json --target node14-macos-x64 --output ../desktop_app/src-tauri/binaries/app && node scripts/move_binary.js macos:x64",
-    "package:linux:arm64": "pkg package.json --target node14-linux-arm64 --output ../desktop_app/src-tauri/binaries/app && node scripts/move_binary.js linux:arm64",
-    "package:linux:x64": "pkg package.json --target node14-linux-x64 --output ../desktop_app/src-tauri/binaries/app && node scripts/move_binary.js linux:x64",
-    "package:windows:arm64": "pkg package.json --target node14-win-arm64 --output ../desktop_app/src-tauri/binaries/app && node scripts/move_binary.js win:arm64",
-    "package:windows:x64": "pkg package.json --target node14-win-x64 --output ../desktop_app/src-tauri/binaries/app && node scripts/move_binary.js win:x64",
+    "package:macos:arm64": "nest build && pkg package.json --target node14-macos-arm64 --output ../desktop_app/src-tauri/binaries/app && node scripts/move_binary.js macos:arm64",
+    "package:macos:x64": "nest build && pkg package.json --target node14-macos-x64 --output ../desktop_app/src-tauri/binaries/app && node scripts/move_binary.js macos:x64",
+    "package:linux:arm64": "nest build && pkg package.json --target node14-linux-arm64 --output ../desktop_app/src-tauri/binaries/app && node scripts/move_binary.js linux:arm64",
+    "package:linux:x64": "nest build && pkg package.json --target node14-linux-x64 --output ../desktop_app/src-tauri/binaries/app && node scripts/move_binary.js linux:x64",
+    "package:windows:arm64": "nest build && pkg package.json --target node14-win-arm64 --output ../desktop_app/src-tauri/binaries/app && node scripts/move_binary.js win:arm64",
+    "package:windows:x64": "nest build && pkg package.json --target node14-win-x64 --output ../desktop_app/src-tauri/binaries/app && node scripts/move_binary.js win:x64",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -37,7 +37,6 @@
     "@nestjs/schedule": "^1.0.2",
     "@nestjs/typeorm": "^8.0.2",
     "axios": "^0.24.0",
-    "better-sqlite3": "^7.5.0",
     "dotenv": "^16.0.0",
     "luxon": "^2.3.0",
     "passport": "^0.5.2",
@@ -46,6 +45,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
+    "sql.js": "^1.6.2",
     "typeorm": "^0.2.41"
   },
   "devDependencies": {
@@ -109,7 +109,7 @@
   "pkg": {
     "assets": [
       "dist/**/*",
-      ".env"
+      "../../node_modules/sql.js/dist/sql-wasm.wasm"
     ]
   }
 }
