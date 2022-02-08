@@ -1,13 +1,15 @@
 import { dialog } from "@tauri-apps/api";
 import backend from "backend";
+import SettingService from "resource/setting";
 import { iAppContextValue } from "./App.store";
 
 export default class AppAction {
-
     constructor(private readonly ctx: iAppContextValue) {}
 
     async init_app() {
         let backend_config = await backend.check_initialized();
+        const initialized = !!backend_config;
+        let dto;
         if (!backend_config) {
             // eslint-disable-next-line
             const yes = confirm("初次使用请先设置 logseq 库位置");
@@ -22,7 +24,9 @@ export default class AppAction {
             backend_config = dto.backend;
         }
         await backend.start_backend(backend_config);
-        // await backend.init_setting(dto);
+        if (!initialized) {
+            await SettingService.init_setting(dto);
+        }
     }
 
     async init() {

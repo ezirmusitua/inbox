@@ -1,4 +1,4 @@
-import { article } from "../resource";
+import { article } from "../resource/article";
 import { iArticleContextValue } from "./Article.store";
 
 export default class ArticleAction {

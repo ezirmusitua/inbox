@@ -1,4 +1,4 @@
-import { article } from "../resource";
+import { article } from "../resource/article";
 import { iTodayContextValue } from "./Today.store";
 
 export default class TodayAction {
