@@ -6,6 +6,7 @@ export const setting = {
     },
     init_setting(dto: InitSettingDto) {},
 };
+
 export const article = {
     refresh_summary() {
         return { data: null };
