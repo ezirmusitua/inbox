@@ -6,8 +6,12 @@ import { Command } from "@tauri-apps/api/shell";
 async function call_start_backend_command(args: string[]) {
     try {
         const command = Command.sidecar("app", args);
-        console.log(command);
-        await command.execute();
+        const resp = await command.execute();
+        if (resp.signal) {
+            throw new Error(
+                `Start process failed with signal ${resp.signal}, exit code ${resp.code}, stdout ${resp.stdout}, stderr ${resp.stderr}`,
+            );
+        }
     } catch (e) {
         // eslint-disable-next-line
         confirm("run start backend command failed: " + e.toString());
@@ -64,7 +68,6 @@ export default {
         const args = Object.keys(backend_config).map(
             (key) => `--${key}=${backend_config[key]}`,
         );
-        console.log("start backend with args: ", args);
         return call_start_backend_command(args);
     },
 };

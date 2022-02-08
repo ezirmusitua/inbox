@@ -7,7 +7,7 @@
 const fs = require("fs");
 
 const Architectures = {
-  "macos:arm64": "arm64-apple-darwin",
+  "macos:arm64": "aarch64-apple-darwin",
   "macos:x64": "x86_64-apple-darwin",
   "linux:arm64": "arm64-unknown-linux-gnu",
   "linux:x64": "x86_64-unknown-linux-gnu",

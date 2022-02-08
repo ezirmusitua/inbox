@@ -3,6 +3,7 @@ import backend from "backend";
 import { iAppContextValue } from "./App.store";
 
 export default class AppAction {
+
     constructor(private readonly ctx: iAppContextValue) {}
 
     async init_app() {
