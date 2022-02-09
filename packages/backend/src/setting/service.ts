@@ -5,6 +5,7 @@ import { SettingEntity } from "./domain/agg/entity";
 @Injectable()
 export class SettingService {
   init_setting(dto: InitSettingDto) {
+    console.log(dto);
     const entity = new SettingEntity(dto);
     return entity.save_setting();
   }

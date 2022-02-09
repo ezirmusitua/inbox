@@ -9,7 +9,7 @@ export default class AppAction {
     async init_app() {
         let backend_config = await backend.check_initialized();
         const initialized = !!backend_config;
-        let dto;
+        let dto = {} as any;
         if (!backend_config) {
             // eslint-disable-next-line
             const yes = confirm("初次使用请先设置 logseq 库位置");
@@ -17,7 +17,7 @@ export default class AppAction {
                 alert("请先设置 logseq 库位置");
                 return;
             }
-            const dto = await backend.prepare_initialization_dto();
+            dto = await backend.prepare_initialization_dto();
             dto.logseq.root = (await dialog.open({
                 directory: true,
             })) as string;

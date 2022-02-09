@@ -7,6 +7,9 @@ async function call_start_backend_command(args: string[]) {
     try {
         const command = Command.sidecar("app", args);
         const resp = await command.execute();
+        command.on("error", (args) => {
+            console.log("command error");
+        });
         if (resp.signal) {
             throw new Error(
                 `Start process failed with signal ${resp.signal}, exit code ${resp.code}, stdout ${resp.stdout}, stderr ${resp.stderr}`,

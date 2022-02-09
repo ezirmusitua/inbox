@@ -45,8 +45,18 @@ export class SettingEntity {
   }
 
   async save_setting() {
+    await this.save_backend_config();
     const setting_path = await SettingEntity.get_setting_path();
     return fs.writeFileSync(setting_path, JSON.stringify(this._data, null, 2));
+  }
+
+  async save_backend_config() {
+    const app_config_dir = `${this._data.device.user_dir}.${this._data.app.name}`;
+    const backend_config_path = `${app_config_dir}${path.sep}backend.json`;
+    return fs.writeFileSync(
+      backend_config_path,
+      JSON.stringify(this._data.backend, null, 2),
+    );
   }
 
   static async get_setting_root() {

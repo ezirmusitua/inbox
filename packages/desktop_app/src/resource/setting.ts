@@ -7,6 +7,7 @@ const SettingService = {
     },
 
     init_setting(dto: InitSettingDto) {
+        console.log("init setting dto: ", dto);
         return post({ url: "api/setting", data: dto });
     },
 

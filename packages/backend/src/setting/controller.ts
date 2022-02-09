@@ -1,5 +1,5 @@
 import { InitSettingDto } from "@inbox/shared";
-import { Controller, Get, Post, Put } from "@nestjs/common";
+import { Body, Controller, Get, Post, Put } from "@nestjs/common";
 import { SettingService } from "./service";
 
 @Controller("api/setting")
@@ -12,7 +12,7 @@ export class SettingController {
   }
 
   @Post("")
-  init_setting(dto: InitSettingDto) {
+  init_setting(@Body() dto: InitSettingDto) {
     return this.service.init_setting(dto);
   }
 

@@ -31,14 +31,15 @@ export async function _fetch(options: iFetchOptions) {
         "Content-Type": "application/json",
         ...(options.headers || {}),
     };
-    const is_json = _headers["Content-Type"] === "application/json";
-    const is_form =
-        _headers["Content-Type"] === "application/x-www-form-urlencoded";
+    const is_json = _headers["Content-Type"].includes("application/json");
+    const is_form = _headers["Content-Type"].includes(
+        "application/x-www-form-urlencoded",
+    );
     const is_blob_data = options.data && options.data instanceof Blob;
     const is_form_data = options.data && options.data instanceof FormData;
     const is_string_data = options.data && options.data instanceof String;
 
-    let _body = null as string | FormData | Blob;
+    let _body = options.data as string | FormData | Blob;
     if (is_blob_data || is_form_data || is_string_data) {
         _body = options.data as Blob | FormData | string;
     } else if (is_json) {
@@ -55,6 +56,17 @@ export async function _fetch(options: iFetchOptions) {
         options.params || {},
         options.query || {},
     );
+    console.log("fetch options: ", {
+        method: options.method || "GET",
+        headers: _headers,
+        body: _body,
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+        ...(options.raw_options || {}),
+    });
     const resp = await fetch(_url, {
         method: options.method || "GET",
         headers: _headers,
