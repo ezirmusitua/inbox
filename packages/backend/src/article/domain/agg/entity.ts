@@ -12,7 +12,7 @@ export class ArticleEntity {
   get data() {
     return {
       title: this._title,
-      items: this._data,
+      items: this._data.map((i) => ({ ...i, saved_at: new Date(i.saved_at) })),
     };
   }
 

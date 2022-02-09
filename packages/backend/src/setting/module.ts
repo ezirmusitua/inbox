@@ -1,10 +1,11 @@
 import { Module } from "@nestjs/common";
-import { SettingService } from "./service";
+import { SettingConfig } from "./config";
 import { SettingController } from "./controller";
+import { SettingService } from "./service";
 
 @Module({
   imports: [],
-  providers: [SettingService],
+  providers: [SettingService, SettingConfig],
   exports: [SettingService],
   controllers: [SettingController],
 })

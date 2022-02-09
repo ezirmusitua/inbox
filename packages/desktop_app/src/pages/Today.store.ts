@@ -24,7 +24,12 @@ export const init_state: iTodayState = {
 export function reducer(state: iTodayState, action: iAction) {
     switch (action.type) {
         case "set_items":
-            return { ...state, items: action.payload };
+            const items = action.payload.map((i) => ({
+                ...i,
+                saved_at: new Date(i.saved_at),
+            }));
+            console.log(items);
+            return { ...state, items };
         case "set_initialized":
             return { ...state, initialized: action.payload };
     }

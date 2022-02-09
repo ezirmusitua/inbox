@@ -9,9 +9,6 @@ async function call_start_backend_command(args: string[]) {
     try {
         const command = Command.sidecar("app", args);
         const resp = await command.execute();
-        command.on("error", (args) => {
-            console.log("command error");
-        });
         if (resp.signal) {
             throw new Error(
                 `Start process failed with signal ${resp.signal}, exit code ${resp.code}, stdout ${resp.stdout}, stderr ${resp.stderr}`,
@@ -19,14 +16,13 @@ async function call_start_backend_command(args: string[]) {
         }
     } catch (e) {
         // eslint-disable-next-line
-        confirm("run start backend command failed: " + e.toString());
-        console.log("run start backend command failed: ", e);
+        alert("run start backend command failed: " + e.toString());
     }
 }
 
 export default {
     async check_initialized() {
-        if (is_dev) return null;
+        if (is_dev) return {};
         const user_dir = await path.homeDir();
         const app_name = "inbox";
         const app_config_dir = `${user_dir}.${app_name}`;
@@ -43,11 +39,6 @@ export default {
         const document_dir = await path.documentDir();
         const user_dir = await path.homeDir();
         const app_name = "inbox";
-        try {
-            await fs.createDir(`${user_dir}.${app_name}`);
-        } catch (e) {
-            console.log("init app directory failed: ", e);
-        }
         return {
             app: {
                 name: app_name,
