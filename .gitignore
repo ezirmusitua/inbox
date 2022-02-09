@@ -22,3 +22,4 @@ secrets.*.js
 **.code-workspace
 **/.parcel-cache
 **/dist
+**/.mock

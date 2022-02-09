@@ -1,8 +1,10 @@
 import { iBackendConfig } from "@inbox/shared";
 import { fs, path } from "@tauri-apps/api";
 import { Command } from "@tauri-apps/api/shell";
-// alternatively, use `window.__TAURI__.shell.Command`
-// `my-sidecar` is the value specified on `tauri.conf.json > tauri > bundle > externalBin`
+
+const env = process.env.NODE_ENV;
+const is_dev = env === "development";
+
 async function call_start_backend_command(args: string[]) {
     try {
         const command = Command.sidecar("app", args);
@@ -24,6 +26,7 @@ async function call_start_backend_command(args: string[]) {
 
 export default {
     async check_initialized() {
+        if (is_dev) return null;
         const user_dir = await path.homeDir();
         const app_name = "inbox";
         const app_config_dir = `${user_dir}.${app_name}`;
@@ -66,8 +69,8 @@ export default {
             },
         };
     },
-    init_setting() {},
     start_backend(backend_config: iBackendConfig) {
+        if (is_dev) return;
         const args = Object.keys(backend_config).map(
             (key) => `--${key}=${backend_config[key]}`,
         );
