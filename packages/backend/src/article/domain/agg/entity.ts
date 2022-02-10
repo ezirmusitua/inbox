@@ -3,6 +3,12 @@ import * as path from "path";
 import { join_indent, parse_indent } from "utils";
 import { iArticle, iStructuredContent } from "@inbox/shared";
 
+interface iBrowserArticle {
+  title: string;
+  url: string;
+  content: string;
+}
+
 export class ArticleEntity {
   public readonly _title = this._path.split(path.sep).pop();
   private _url_set = new Set<string>(this._data.map((d) => d.url));
@@ -43,7 +49,7 @@ export class ArticleEntity {
     );
   }
 
-  static async read_from_file(path: string) {
+  static read_from_file(path: string) {
     try {
       const content = fs.readFileSync(path).toString();
       const structured = parse_indent(content);
@@ -52,6 +58,7 @@ export class ArticleEntity {
         ArticleEntity.convert_to_article(structured),
       );
     } catch (e) {
+      console.log(e);
       return new ArticleEntity(path, []);
     }
   }

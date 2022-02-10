@@ -9,6 +9,10 @@ export class SettingEntity {
     return this._data.logseq.root;
   }
 
+  get logseq_page_dir_path() {
+    return path.join(this._data.logseq.root, "pages");
+  }
+
   get setting_dir() {
     return path.join(this._data.device.document_dir, `.${this._data.app.name}`);
   }
@@ -17,28 +21,20 @@ export class SettingEntity {
     return path.join(this.setting_dir, `settings.json`);
   }
 
-  get ext_dir_path() {
-    return path.join(this.logseq_dir_path, "extensions");
-  }
-
-  get ext_app_dir_path() {
-    return path.join(this.ext_dir_path, this._data.app.name);
-  }
-
   get today_article_path() {
     const now = new Date();
     return this.concat_day_path(now);
   }
 
   get article_summary_path() {
-    return path.join(this.ext_app_dir_path, "汇总信息列表.md");
+    return path.join(this.logseq_page_dir_path, "汇总信息列表.md");
   }
 
   get all_path() {
     return fs
-      .readdirSync(this.logseq_dir_path)
+      .readdirSync(this.logseq_page_dir_path)
       .filter((f) => f.endsWith("信息列表.md"))
-      .map((f) => path.join(this.logseq_dir_path, f));
+      .map((f) => path.join(this.logseq_page_dir_path, f));
   }
 
   update_setting(setting: iAppSetting) {
@@ -53,7 +49,6 @@ export class SettingEntity {
   init_setting() {
     this.ensure_setting_dir();
     this.save_backend_config();
-    this.ensure_extension_dir();
     this.save_setting();
   }
 
@@ -67,17 +62,6 @@ export class SettingEntity {
   ensure_setting_dir() {
     if (!fs.existsSync(this.setting_dir)) {
       fs.mkdirSync(this.setting_dir);
-    }
-  }
-
-  ensure_extension_dir() {
-    const ext_exists = fs.existsSync(this.ext_dir_path);
-    if (!ext_exists) {
-      fs.mkdirSync(this.ext_dir_path);
-    }
-    const ext_app_exists = fs.existsSync(this.ext_app_dir_path);
-    if (!ext_app_exists) {
-      fs.mkdirSync(this.ext_app_dir_path);
     }
   }
 
@@ -97,7 +81,7 @@ export class SettingEntity {
     const day = dt.getDate();
     const day_str = day < 10 ? "0" + day : day + "";
     return path.join(
-      this.ext_app_dir_path,
+      this.logseq_page_dir_path,
       `${year_str}_${month_str}_${day_str}-信息列表.md`,
     );
   }

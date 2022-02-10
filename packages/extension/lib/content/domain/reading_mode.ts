@@ -14,23 +14,31 @@ export class ReadingMode implements iReadingMode {
     return ReadingMode.instance;
   }
 
-  apply(definition: iReadingModeDef) {
+  apply(def: iReadingModeDef) {
+    const mode_container = this.generate_mode_view(def);
+    // TODO: show loading mask
+    this._origin_container.style.display = "none";
+    this._body.append(mode_container);
+    // TODO: hide loading mask
+  }
+
+  generate_mode_view(def: iReadingModeDef) {
     if (!this._body) return;
-    const { removed, reserved, css } = definition;
+    const mode_class = `__reading_mode-${def.id}-container`;
+    let mode_container = document.querySelector(mode_class);
+    if (mode_container) return mode_container;
+    const { removed, reserved, css } = def;
     const cloned = this._origin_container.cloneNode(true) as Element;
     for (const { selector } of removed) {
       const elem = cloned.querySelector(selector);
-      console.log("removed element: ", elem, selector);
       if (elem) {
         elem.remove();
       }
     }
-    const mode_container = document.createElement("section");
-    const mode_class = `__reading_mode-${definition.id}-container`;
+    mode_container = document.createElement("section");
     mode_container.setAttribute("class", mode_class);
     for (const { selector, new_selector } of reserved) {
       const elem = cloned.querySelector(selector);
-      console.log("reserved element: ", elem, selector);
       if (elem) {
         // elem.setAttribute("class", new_selector);
         mode_container.append(elem);
@@ -45,10 +53,7 @@ export class ReadingMode implements iReadingMode {
       document.querySelector("head")?.append(style_el);
     }
     cloned.remove();
-    // TODO: show loading mask
-    this._origin_container.style.display = "none";
-    this._body.append(mode_container);
-    // TODO: hide loading mask
+    return mode_container;
   }
 
   private _make_origin_element() {
@@ -58,7 +63,6 @@ export class ReadingMode implements iReadingMode {
       this._origin_container = document.createElement("section");
       this._origin_container.setAttribute("class", ORIGIN_CONTAINER_CLS_NAME);
       Array.from(this._body.children).forEach((elem) => {
-        console.log("element to copy: ", elem);
         if (!["script", "style"].includes(elem.nodeName.toLowerCase())) {
           this._origin_container.append(elem);
         }

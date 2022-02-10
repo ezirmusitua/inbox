@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { usePopper } from "react-popper";
 import Context from "../context";
 import Service from "../service";
+import { eActionType, eReadingModeStage } from "../store";
 
 function ModeItem({ item, last }: any) {
   let className = [
@@ -50,7 +51,11 @@ function ModeList() {
         value={ctx.state.mode}
         onChange={(mode) => {
           service.use_reading_mode(mode);
-          ctx.dispatch({ type: "change_mode", payload: mode });
+          ctx.dispatch({ type: eActionType.CHANGE_MODE, payload: mode });
+          ctx.dispatch({
+            type: eActionType.CHANGE_STAGE,
+            payload: eReadingModeStage.VIEWING,
+          });
         }}
       >
         {items.map((item, index) => (

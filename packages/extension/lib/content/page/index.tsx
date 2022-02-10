@@ -9,7 +9,6 @@ import "./style.css";
 
 function ReadingModeTool() {
   const [state, dispatch] = useReducer(reducer, init_state);
-  console.log("reading mode tool mounted");
   return (
     <div>
       <Context.Provider value={{ state, dispatch }}>

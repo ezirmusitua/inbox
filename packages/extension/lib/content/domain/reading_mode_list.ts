@@ -1,5 +1,5 @@
 import INFOQ_PRESET from "../data/infoq";
-import UISDC_PRESET from "../data/usidc";
+import USIDC_PRESET from "../data/usidc";
 import _36KR_PRESET from "../data/_36kr";
 import GCORES_PRESET from "../data/gcores";
 import WOSHIPM_PRESET from "../data/woshipm";
@@ -11,7 +11,7 @@ import GITHUB_PRESET from "../data/github";
 export default class ReadingModeList {
   private readonly _list = [
     INFOQ_PRESET,
-    UISDC_PRESET,
+    USIDC_PRESET,
     _36KR_PRESET,
     GCORES_PRESET,
     WOSHIPM_PRESET,

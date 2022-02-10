@@ -15,7 +15,6 @@ export default class Service {
   validate_api(name: string) {
     if (!this._api[name]) {
       const msg = `api:${name} not found`;
-      console.log(msg);
       throw new Error(msg);
     }
   }
@@ -28,5 +27,10 @@ export default class Service {
   use_reading_mode(mode: string) {
     this.validate_api("use_reading_mode");
     return this._api.use_reading_mode(mode);
+  }
+
+  send_to_inbox(mode: string) {
+    this.validate_api("send_to_inbox");
+    return this._api.send_to_inbox(mode);
   }
 }

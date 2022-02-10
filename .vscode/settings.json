@@ -9,5 +9,16 @@
     "**/.hg/store/**": true,
     "**/dist/**": true,
     "**/binaries/**": true,
-  }
+  },
+  "cSpell.words": [
+    "GCORES",
+    "INFOQ",
+    "LEIPHONE",
+    "SSPAI",
+    "THOUGHTWORKS",
+    "thoughworks",
+    "UISDC",
+    "USIDC",
+    "WOSHIPM"
+  ]
 }

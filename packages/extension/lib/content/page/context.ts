@@ -1,11 +1,9 @@
 import { createContext } from "react";
-import { iState, iPayload } from "./store";
+import { iState, iAction } from "./store";
 
 const Context = createContext({
   state: {} as iState,
-  dispatch(action: iPayload) {
-    return;
-  },
+  dispatch: (_: iAction) => null,
 });
 
 export default Context;

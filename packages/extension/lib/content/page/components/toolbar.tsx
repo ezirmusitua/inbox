@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import Context from "../context";
-import { eReadingModeStage } from "../store";
+import { eActionType, eReadingModeStage } from "../store";
 
 function Button({ label, onClick, bg }: any) {
   const className = [
@@ -25,7 +25,7 @@ export default function Toolbar() {
         label="Cancel"
         onClick={() =>
           ctx.dispatch({
-            type: "change_stage",
+            type: eActionType.CHANGE_STAGE,
             payload: eReadingModeStage.START,
           })
         }

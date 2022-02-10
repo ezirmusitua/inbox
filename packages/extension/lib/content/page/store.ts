@@ -4,26 +4,31 @@ export enum eReadingModeStage {
   EDITING,
 }
 
+export enum eActionType {
+  CHANGE_STAGE,
+  CHANGE_MODE,
+}
+
 export interface iState {
   stage: eReadingModeStage;
   mode: string;
 }
 
-export interface iPayload {
-  type: string;
+export interface iAction {
+  type: eActionType;
   payload: eReadingModeStage | string | Record<string, any>;
 }
 
-export const init_state = {
+export const init_state: iState = {
   mode: "",
   stage: eReadingModeStage.START,
 };
 
-export function reducer(state: iState, action: iPayload) {
+export function reducer(state: iState, action: iAction) {
   switch (action.type) {
-    case "change_stage":
+    case eActionType.CHANGE_STAGE:
       return { ...state, stage: action.payload as eReadingModeStage };
-    case "change_mode":
+    case eActionType.CHANGE_MODE:
       return { ...state, mode: action.payload as string };
     default:
       return { ...state };
