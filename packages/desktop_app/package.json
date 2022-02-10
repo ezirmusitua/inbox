@@ -29,8 +29,6 @@
   },
   "scripts": {
     "dev": "NODE_ENV=development react-scripts start",
-    "dev:desktop": "node wc.js ./src-tauri /private_workspaces/inbox/desktop_app/",
-    "dev:web": "react-scripts start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
