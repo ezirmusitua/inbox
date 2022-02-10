@@ -13,6 +13,10 @@ export class SettingEntity {
     return path.join(this._data.logseq.root, "pages");
   }
 
+  get logseq_asset_dir_path() {
+    return path.join(this._data.logseq.root, "assets");
+  }
+
   get setting_dir() {
     return path.join(this._data.device.document_dir, `.${this._data.app.name}`);
   }

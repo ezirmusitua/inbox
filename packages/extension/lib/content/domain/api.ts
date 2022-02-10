@@ -32,7 +32,7 @@ export default {
       const url = window.location.href;
       const title = document.querySelector("title").innerText;
       const elem = reading_mode.generate_mode_view(def);
-      const elem_cpy = elem.cloneNode();
+      const elem_cpy = elem.cloneNode(true);
       const mount = document.createElement("div");
       mount.appendChild(elem_cpy);
       const content = mount.innerHTML;
