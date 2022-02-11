@@ -33,14 +33,17 @@ export class ArticleEntity {
         this._data.push(item);
         this._data.sort((p, n) => n.saved_at.getTime() - p.saved_at.getTime());
         this._url_set.add(item.url);
-        console.log("has content: ", item.content);
         if (item.content && !item.pdf) {
           const pdf = new Pdf(item.content);
           const buffer = await pdf.generate();
-          item.pdf = `${DateTime.fromJSDate(item.saved_at).toFormat(
+          const pdf_name = `${DateTime.fromJSDate(item.saved_at).toFormat(
             "yyyy_MM_dd",
           )}-${item.title}.pdf`;
-          this.save_asset(buffer, item.pdf);
+          item.pdf = `SOURCE: ![${item.title.replace(
+            / /g,
+            "_",
+          )}.pdf](../assets/${pdf_name})`;
+          this.save_asset(buffer, pdf_name);
         }
       }
     }
@@ -57,7 +60,7 @@ export class ArticleEntity {
       join_indent(
         this._data.map((article) => ({
           content: article.title,
-          children: [article.url, article.saved_at],
+          children: [article.url, article.saved_at, article.pdf],
         })),
       ),
     );
@@ -84,6 +87,7 @@ export class ArticleEntity {
         title: content.slice(2),
         url: children[0].content.slice(2),
         saved_at: new Date(children[1].content.slice(2)),
+        pdf: children[2]?.content?.slice(2),
       };
     });
   }
