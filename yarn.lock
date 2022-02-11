@@ -13666,10 +13666,10 @@ pupa@^2.1.1:
   dependencies:
     escape-goat "^2.0.0"
 
-puppeteer@^13.3.0:
-  version "13.3.0"
-  resolved "https://registry.npmmirror.com/puppeteer/-/puppeteer-13.3.0.tgz#610efb11c7ca4a5c28d7efa84c91f5187b10564b"
-  integrity sha512-qEsXUQhF4mcF++0O5N7mW7jcVXqztC9fWYj14s2xNrd16SD1U/rCfV0BYE6/MBK7sHXi400qJlxWv7INYytZtQ==
+puppeteer-core@^13.3.1:
+  version "13.3.1"
+  resolved "https://registry.npmmirror.com/puppeteer-core/-/puppeteer-core-13.3.1.tgz#2337320e0f19774a83460a732adf4a7198857c31"
+  integrity sha512-II9uo5MFh+otoJSoYp/kfY3jf1iWt0ySKyK8vFVfdbn3rl+k3SLh9nQRdINyoO1Kt6Tk4dPp6GZipD9jgU9wmw==
   dependencies:
     cross-fetch "3.1.5"
     debug "4.3.3"

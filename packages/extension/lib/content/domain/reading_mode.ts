@@ -1,3 +1,5 @@
+import { EXTENSION_CONTENT_BTN_ID } from "@inbox/shared";
+import { RM_MOUNTED_ID } from "../page";
 import { ORIGIN_CONTAINER_CLS_NAME } from "./constant";
 import { iReadingMode, iReadingModeDef } from "./interface";
 
@@ -9,7 +11,6 @@ export class ReadingMode implements iReadingMode {
   constructor() {
     if (!ReadingMode.instance) {
       ReadingMode.instance = this;
-      this._make_origin_element();
     }
     return ReadingMode.instance;
   }
@@ -23,10 +24,11 @@ export class ReadingMode implements iReadingMode {
   }
 
   generate_mode_view(def: iReadingModeDef) {
-    if (!this._body) return;
     const mode_class = `__reading_mode-${def.id}-container`;
     let mode_container = document.querySelector(mode_class);
     if (mode_container) return mode_container;
+    this._make_origin_element();
+    if (!this._body) return;
     const { removed, reserved, css } = def;
     const cloned = this._origin_container.cloneNode(true) as Element;
     for (const { selector } of removed) {
@@ -37,7 +39,8 @@ export class ReadingMode implements iReadingMode {
     }
     mode_container = document.createElement("section");
     mode_container.setAttribute("class", mode_class);
-    for (const { selector, new_selector } of reserved) {
+    for (const { selector } of reserved) {
+      // TODO: 这里需要保留顺序
       const elem = cloned.querySelector(selector);
       if (elem) {
         // elem.setAttribute("class", new_selector);
@@ -63,11 +66,18 @@ export class ReadingMode implements iReadingMode {
       this._origin_container = document.createElement("section");
       this._origin_container.setAttribute("class", ORIGIN_CONTAINER_CLS_NAME);
       Array.from(this._body.children).forEach((elem) => {
-        if (!["script", "style"].includes(elem.nodeName.toLowerCase())) {
-          this._origin_container.append(elem);
+        const is_style_or_script = ["script", "style"].includes(
+          elem.nodeName.toLowerCase()
+        );
+        const from_extension = [
+          EXTENSION_CONTENT_BTN_ID,
+          RM_MOUNTED_ID,
+        ].includes(elem.getAttribute("id"));
+        if (!is_style_or_script && !from_extension) {
+          this._origin_container.appendChild(elem);
         }
       });
-      this._body.append(this._origin_container);
+      this._body.appendChild(this._origin_container);
       // TODO: hide loading mask
     }
   }

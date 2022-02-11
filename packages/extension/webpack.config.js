@@ -91,11 +91,13 @@ module.exports = {
         }),
     ],
     output: {
-        path: path.resolve('/private_workspaces', 'inbox', 'extension', 'dist'),
+        // path: path.resolve('/private_workspaces', 'inbox', 'extension', 'dist'),
+        path: path.resolve('dist'),
         clean: true
     },
     devServer: {
-        static: "/private_workspaces/inbox/extension/dist"
+        // static: "/private_workspaces/inbox/extension/dist",
+        static: path.resolve('dist'),
     },
     experiments: {
         asyncWebAssembly: true,

@@ -17,6 +17,7 @@ export default {
   use_reading_mode(mode: string) {
     try {
       const def = list.get_mode_def(mode);
+      console.log("using reading mode: ", mode, def);
       if (!def) return;
       reading_mode.apply(def);
     } catch (e) {

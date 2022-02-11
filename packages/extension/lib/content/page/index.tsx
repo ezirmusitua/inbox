@@ -7,6 +7,8 @@ import Service from "./service";
 import { init_state, reducer } from "./store";
 import "./style.css";
 
+export const RM_MOUNTED_ID = "__reading_mode_view_mount_point";
+
 function ReadingModeTool() {
   const [state, dispatch] = useReducer(reducer, init_state);
   return (
@@ -23,7 +25,8 @@ export default function mount_view(api: Record<string, any>) {
   const mount_point = document.createElement("div");
   const service = new Service();
   service.set_api(api);
-  mount_point.setAttribute("id", "reading_mode_view_mount_point");
-  document.querySelector("body")?.appendChild(mount_point);
+  mount_point.setAttribute("id", RM_MOUNTED_ID);
+  const body = document.querySelector("body");
+  document.querySelector("body").appendChild(mount_point);
   render(<ReadingModeTool />, mount_point);
 }
