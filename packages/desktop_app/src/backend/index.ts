@@ -57,6 +57,7 @@ export default {
                 db_database: `${user_dir}.${app_name}${path.sep}settings.db`,
                 jwt_secret: "helloworld",
                 jwt_expires: "30d",
+                browser_bin: "",
             },
         };
     },

@@ -18,11 +18,13 @@ export class ArticleService
   constructor(private readonly setting: SettingService) {}
 
   async onApplicationBootstrap() {
-    await new Printer().initialize();
+    const browser_path = this.setting.get_setting().browser_path;
+    await new Printer(browser_path).initialize();
   }
 
-  async onApplicationShutdown(signal?: string) {
-    await new Printer().destroy();
+  async onApplicationShutdown() {
+    const browser_path = this.setting.get_setting().browser_path;
+    await new Printer(browser_path).destroy();
   }
 
   get_today_article() {
@@ -45,7 +47,7 @@ export class ArticleService
       setting.article_summary_path,
       setting.logseq_asset_dir_path,
     );
-    const daily_path = setting.all_path.filter(
+    const daily_path = setting.all_article_path.filter(
       (p) => p !== setting.article_summary_path,
     );
     for (const fp of daily_path) {

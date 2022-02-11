@@ -5,7 +5,8 @@ export class Printer {
   private browser: puppeteer.Browser;
   private page: puppeteer.Page;
   private _initialized = false;
-  constructor() {
+
+  constructor(private readonly browser_bin: string) {
     if (!Printer.instance) {
       Printer.instance = this;
     }
@@ -16,7 +17,7 @@ export class Printer {
     // TODO: make executable path configurable
     this.browser = await puppeteer.launch({
       headless: true,
-      executablePath: "/usr/bin/chromium",
+      executablePath: this.browser_bin,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     this.page = await this.browser.newPage();
@@ -35,11 +36,16 @@ export class Printer {
     await this.browser.close();
     this._initialized = false;
   }
+
+  static get_instance() {
+    if (!Printer.instance) throw new Error("Printer is not initialized");
+    return Printer.instance;
+  }
 }
 
 export class Pdf {
   private _pdf_buffer: Buffer;
-  private _printer = new Printer();
+  private _printer = Printer.get_instance();
   constructor(private content: string) {}
 
   async generate() {

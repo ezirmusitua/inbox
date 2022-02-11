@@ -5,6 +5,14 @@ import { iAppSetting } from "@inbox/shared";
 export class SettingEntity {
   constructor(private readonly _data: iAppSetting) {}
 
+  get setting_dir() {
+    return path.join(this._data.device.document_dir, `.${this._data.app.name}`);
+  }
+
+  get setting_path() {
+    return path.join(this.setting_dir, `settings.json`);
+  }
+
   get logseq_dir_path() {
     return this._data.logseq.root;
   }
@@ -17,14 +25,6 @@ export class SettingEntity {
     return path.join(this._data.logseq.root, "assets");
   }
 
-  get setting_dir() {
-    return path.join(this._data.device.document_dir, `.${this._data.app.name}`);
-  }
-
-  get setting_path() {
-    return path.join(this.setting_dir, `settings.json`);
-  }
-
   get today_article_path() {
     const now = new Date();
     return this.concat_day_path(now);
@@ -34,11 +34,15 @@ export class SettingEntity {
     return path.join(this.logseq_page_dir_path, "汇总信息列表.md");
   }
 
-  get all_path() {
+  get all_article_path() {
     return fs
       .readdirSync(this.logseq_page_dir_path)
       .filter((f) => f.endsWith("信息列表.md"))
       .map((f) => path.join(this.logseq_page_dir_path, f));
+  }
+
+  get browser_path() {
+    return this._data.backend.browser_bin;
   }
 
   update_setting(setting: iAppSetting) {

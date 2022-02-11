@@ -5,6 +5,7 @@ export interface iBackendConfig {
     db_database: string;
     jwt_secret: string;
     jwt_expires: string;
+    browser_bin: string;
 }
 
 export interface iLogseqConfig {
