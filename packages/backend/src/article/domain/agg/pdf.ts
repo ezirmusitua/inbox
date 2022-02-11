@@ -3,7 +3,6 @@ import puppeteer from "puppeteer-core";
 export class Printer {
   static instance: Printer;
   private browser: puppeteer.Browser;
-  private page: puppeteer.Page;
   private _initialized = false;
 
   constructor(private readonly browser_bin: string) {
@@ -20,19 +19,21 @@ export class Printer {
       executablePath: this.browser_bin,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
-    this.page = await this.browser.newPage();
     this._initialized = true;
   }
 
   async print_pdf(html: string) {
     await this.initialize();
-    await this.page.setContent(html);
-    return this.page.pdf({ format: "a4" });
+
+    const page = await this.browser.newPage();
+    await page.setContent(html);
+    const buffer = await page.pdf({ format: "a4" });
+    await page.close();
+    return buffer;
   }
 
   async destroy() {
     if (!this._initialized) return;
-    await this.page.close();
     await this.browser.close();
     this._initialized = false;
   }
@@ -49,7 +50,6 @@ export class Pdf {
   constructor(private content: string) {}
 
   async generate() {
-    console.debug(this.content);
     if (!this._pdf_buffer) {
       this._pdf_buffer = await this._printer.print_pdf(this.content);
     }

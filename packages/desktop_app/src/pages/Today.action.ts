@@ -1,5 +1,5 @@
 import { article } from "../resource/article";
-import { iTodayContextValue } from "./Today.store";
+import { eActionType, iTodayContextValue } from "./Today.store";
 
 export default class TodayAction {
     constructor(private readonly ctx: iTodayContextValue) {}
@@ -7,7 +7,7 @@ export default class TodayAction {
     async init() {
         const { data } = await article.get_today();
         this.ctx.dispatch({
-            type: "set_items",
+            type: eActionType.CHANGE_ITEMS,
             payload: [
                 {
                     ...data,
@@ -18,6 +18,9 @@ export default class TodayAction {
                 },
             ],
         });
-        this.ctx.dispatch({ type: "set_initialized", payload: true });
+        this.ctx.dispatch({
+            type: eActionType.CHANGE_INITIALIZED,
+            payload: true,
+        });
     }
 }

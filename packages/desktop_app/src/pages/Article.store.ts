@@ -7,8 +7,13 @@ export interface iArticleState {
 }
 
 export interface iAction {
-    type: string;
+    type: eActionType;
     payload: any;
+}
+
+export enum eActionType {
+    CHANGE_INITIALIZED,
+    CHANGE_ITEMS,
 }
 
 export const init_state: iArticleState = {
@@ -18,16 +23,17 @@ export const init_state: iArticleState = {
 
 export function reducer(state: iArticleState, action: iAction) {
     switch (action.type) {
-        case "set_items":
+        case eActionType.CHANGE_ITEMS:
             const items = action.payload.map((i) => ({
                 ...i,
                 saved_at: new Date(i.saved_at),
             }));
             return { ...state, items };
-        case "set_initialized":
+        case eActionType.CHANGE_INITIALIZED:
             return { ...state, initialized: action.payload };
+        default:
+            return { ...state };
     }
-    return { ...state };
 }
 
 export interface iArticleContextValue {

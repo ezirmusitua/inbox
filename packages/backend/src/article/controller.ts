@@ -1,4 +1,15 @@
-import { Body, Controller, Get, Post, Put } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseBoolPipe,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+} from "@nestjs/common";
 import { SaveArticleDto } from "./dto";
 import { ArticleService } from "./service";
 
@@ -24,5 +35,11 @@ export class ArticleController {
   @Get("/")
   list() {
     return this.service.list_article();
+  }
+
+  @Delete("/:url_hash")
+  remove(@Param("url_hash") url_hash: string) {
+    console.log(url_hash);
+    return this.service.remove_article(url_hash);
   }
 }

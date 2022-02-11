@@ -1,18 +1,20 @@
 import { iDayArticleData } from "pages/Today.store";
 import { DateTime } from "luxon";
-import { iArticle } from "@inbox/shared";
+import { article } from "resource/article";
 
 export interface iArticleListProps extends iDayArticleData {
-    on_save: (article: iArticle) => Promise<void>;
-    on_remove: (article: iArticle) => Promise<void>;
+    on_remove: (article: any) => Promise<void>;
 }
 
 export default function ArticleList({
     title,
     items,
-    on_save,
     on_remove,
 }: iArticleListProps) {
+    async function remove_item(item) {
+        await article.remove_article(item._url_hash);
+        on_remove(item);
+    }
     return (
         <div>
             <h2 className="text-2xl py-4">{title}</h2>
@@ -27,13 +29,7 @@ export default function ArticleList({
                             </p>
                             <div className="flex gap-4">
                                 <button
-                                    onClick={() => on_save(article)}
-                                    className="text-blue-400"
-                                >
-                                    保存
-                                </button>
-                                <button
-                                    onClick={() => on_remove(article)}
+                                    onClick={() => remove_item(article)}
                                     className="text-red-400"
                                 >
                                     删除

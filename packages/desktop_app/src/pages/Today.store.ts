@@ -6,13 +6,18 @@ export interface iDayArticleData {
     items: iArticle[];
 }
 
+export enum eActionType {
+    CHANGE_INITIALIZED,
+    CHANGE_ITEMS,
+}
+
 export interface iTodayState {
     items: iDayArticleData[];
     initialized: boolean;
 }
 
 export interface iAction {
-    type: string;
+    type: eActionType;
     payload: any;
 }
 
@@ -23,16 +28,21 @@ export const init_state: iTodayState = {
 
 export function reducer(state: iTodayState, action: iAction) {
     switch (action.type) {
-        case "set_items":
+        case eActionType.CHANGE_ITEMS:
+            console.log("today change items: ", action.payload.map((i) => ({
+                ...i,
+                saved_at: new Date(i.saved_at),
+            })))
             const items = action.payload.map((i) => ({
                 ...i,
                 saved_at: new Date(i.saved_at),
             }));
             return { ...state, items };
-        case "set_initialized":
+        case eActionType.CHANGE_INITIALIZED:
             return { ...state, initialized: action.payload };
+        default:
+            return { ...state };
     }
-    return { ...state };
 }
 
 export interface iTodayContextValue {

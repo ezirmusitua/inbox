@@ -38,15 +38,13 @@ export class ArticleService
       { ...article, saved_at: new Date() },
     ]);
     entity.save();
+    this.refresh_summary();
     return { data: result.data, status: 1 };
   }
 
   refresh_summary() {
+    const summary_entity = this.get_summary_entity();
     const setting = this.setting.get_setting();
-    const summary_entity = ArticleEntity.read_from_file(
-      setting.article_summary_path,
-      setting.logseq_asset_dir_path,
-    );
     const daily_path = setting.all_article_path.filter(
       (p) => p !== setting.article_summary_path,
     );
@@ -70,10 +68,34 @@ export class ArticleService
     return { data: summary_entity.data, status: 1 };
   }
 
+  remove_article(url_hash: string) {
+    const setting = this.setting.get_setting();
+    const summary_entity = this.get_summary_entity();
+    const target = summary_entity.remove_article(url_hash);
+    if (target) {
+      summary_entity.save();
+      const day_entity = ArticleEntity.read_from_file(
+        target._day_file,
+        setting.logseq_asset_dir_path,
+      );
+      day_entity.remove_article(url_hash);
+      day_entity.save();
+    }
+    return { status: 1 };
+  }
+
   private get_today_entity() {
     const setting = this.setting.get_setting();
     return ArticleEntity.read_from_file(
       setting.today_article_path,
+      setting.logseq_asset_dir_path,
+    );
+  }
+
+  private get_summary_entity() {
+    const setting = this.setting.get_setting();
+    return ArticleEntity.read_from_file(
+      setting.article_summary_path,
       setting.logseq_asset_dir_path,
     );
   }

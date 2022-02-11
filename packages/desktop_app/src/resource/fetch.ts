@@ -20,7 +20,7 @@ function concat_url(
     query: Record<string, any>,
 ) {
     Object.keys(params).forEach((key) => {
-        url = url.replace(new RegExp(key, "i"), params[key] + "");
+        url = url.replace(new RegExp(`:${key}`, "i"), params[key] + "");
     });
     url += "?" + new URLSearchParams(query).toString();
     return `${base}/${url}`;

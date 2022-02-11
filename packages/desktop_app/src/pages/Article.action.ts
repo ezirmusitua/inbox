@@ -1,16 +1,18 @@
 import { article } from "../resource/article";
-import { iArticleContextValue } from "./Article.store";
+import { eActionType, iArticleContextValue } from "./Article.store";
 
 export default class ArticleAction {
     constructor(private readonly ctx: iArticleContextValue) {}
 
     async init() {
-        // TODO: add init today api, create if not exist
         const resp = await article.refresh_summary();
         this.ctx.dispatch({
-            type: "set_items",
+            type: eActionType.CHANGE_ITEMS,
             payload: resp.data.items,
         });
-        this.ctx.dispatch({ type: "set_initialized", payload: true });
+        this.ctx.dispatch({
+            type: eActionType.CHANGE_INITIALIZED,
+            payload: true,
+        });
     }
 }

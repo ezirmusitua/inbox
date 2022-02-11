@@ -3,6 +3,7 @@ import Layout from "components/Layout";
 import { useEffect, useReducer } from "react";
 import TodayAction from "./Today.action";
 import {
+    eActionType,
     iDayArticleData,
     init_state,
     reducer,
@@ -23,8 +24,22 @@ export default function TodayPage() {
                         key={i}
                         title={day.title}
                         items={day.items}
-                        on_remove={() => Promise.resolve({} as any)}
-                        on_save={() => Promise.resolve({} as any)}
+                        on_remove={(item) => {
+                            console.log(
+                                item,
+                                state.items.filter(
+                                    ({ _url_hash }) =>
+                                        _url_hash !== item._url_hash,
+                                ),
+                            );
+                            return dispatch({
+                                type: eActionType.CHANGE_ITEMS,
+                                payload: state.items.filter(
+                                    ({ _url_hash }) =>
+                                        _url_hash !== item._url_hash,
+                                ),
+                            }) as any;
+                        }}
                     ></ArticleList>
                 ))}
             </TodayContext.Provider>
