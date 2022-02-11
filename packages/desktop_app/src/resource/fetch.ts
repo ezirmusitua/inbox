@@ -56,17 +56,6 @@ export async function _fetch(options: iFetchOptions) {
         options.params || {},
         options.query || {},
     );
-    console.log("fetch options: ", {
-        method: options.method || "GET",
-        headers: _headers,
-        body: _body,
-        mode: "cors",
-        cache: "no-cache",
-        credentials: "same-origin",
-        redirect: "follow",
-        referrerPolicy: "no-referrer",
-        ...(options.raw_options || {}),
-    });
     const resp = await fetch(_url, {
         method: options.method || "GET",
         headers: _headers,

@@ -19,11 +19,8 @@ export default function Popup() {
     switch (msg.type) {
       case "connected":
         service.do_something();
-        console.log('pop up connected to background')
         break;
       case "pop_event":
-        // do something
-        console.log("received event", msg);
         break;
     }
   }
@@ -42,9 +39,7 @@ export default function Popup() {
     <Container>
       <Context.Provider value={{ state, dispatch }}>
         <ErrorToast></ErrorToast>
-        <ContentContainer>
-          Not implemented
-        </ContentContainer>
+        <ContentContainer>Not implemented</ContentContainer>
       </Context.Provider>
     </Container>
   );

@@ -9,7 +9,7 @@ export default {
     try {
       return list.match_url();
     } catch (e) {
-      console.log(e);
+      console.log("content-script api[load_available_mode]: ", e);
       return { items: [], total: 0 };
     }
   },
@@ -20,7 +20,7 @@ export default {
       if (!def) return;
       reading_mode.apply(def);
     } catch (e) {
-      console.log(e);
+      console.log("content-script api[use_reading_mode]: ", e);
     }
   },
 
@@ -28,7 +28,6 @@ export default {
     try {
       const def = list.get_mode_def(mode);
       if (!def) return def;
-
       const url = window.location.href;
       const title = document.querySelector("title").innerText;
       const elem = reading_mode.generate_mode_view(def);
@@ -43,7 +42,7 @@ export default {
         body: JSON.stringify({ url, title, content }),
       });
     } catch (e) {
-      console.log(e);
+      console.log("content-script api[send_to_inbox]: ", e);
     }
   },
 };

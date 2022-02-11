@@ -25,8 +25,8 @@ export class PopMessageHandler {
         type: "pop_event",
         data: {},
       });
-    } catch {
-      console.log("[Extension] error");
+    } catch (e) {
+      console.log("[Extension] error: ", e);
       port.postMessage({
         type: "error",
         data: { code: eErrorCode.UNKNOWN },

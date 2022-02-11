@@ -28,7 +28,6 @@ export class ArticleEntity {
 
   async add_article(article: iArticle[]) {
     for (const item of article) {
-      console.log(`add article: ${item.url}, ${item.pdf}`);
       if (!this._url_set.has(item.url)) {
         this._data.push(item);
         this._data.sort((p, n) => n.saved_at.getTime() - p.saved_at.getTime());
@@ -76,7 +75,6 @@ export class ArticleEntity {
         asset_dir,
       );
     } catch (e) {
-      console.log(e);
       return new ArticleEntity(path, [], asset_dir);
     }
   }

@@ -34,8 +34,8 @@ export class ContentMessageHandler {
     try {
       action();
       port.postMessage({ type: "content_event", data: {} });
-    } catch {
-      console.log("[Extension] error");
+    } catch (e) {
+      console.log("[Extension] error: ", e);
       port.postMessage({
         type: "error",
         data: { code: eErrorCode.UNKNOWN },

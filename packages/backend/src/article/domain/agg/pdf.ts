@@ -49,11 +49,9 @@ export class Pdf {
   constructor(private content: string) {}
 
   async generate() {
-    console.log("generating pdf...");
     console.debug(this.content);
     if (!this._pdf_buffer) {
       this._pdf_buffer = await this._printer.print_pdf(this.content);
-      console.log(this._pdf_buffer);
     }
     return this._pdf_buffer;
   }

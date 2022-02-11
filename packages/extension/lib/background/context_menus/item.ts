@@ -17,7 +17,6 @@ export class MenuItemClickHandler {
   constructor(private readonly _repo: Repo) {}
 
   async handle(info: chrome.contextMenus.OnClickData, _: chrome.tabs.Tab) {
-    console.log("handle context menu click event");
     action()
   }
 }

@@ -1,7 +1,4 @@
-import {
-  CONNECTION_NAME,
-  EXTENSION_CONTENT_BTN_ID,
-} from "@inbox/shared";
+import { CONNECTION_NAME, EXTENSION_CONTENT_BTN_ID } from "@inbox/shared";
 import api from "./domain/api";
 import { EventHandler } from "./event";
 import mount_view from "./page";
@@ -96,5 +93,5 @@ try {
   cs.register(new EventHandler());
   cs.mount_view(api);
 } catch (e) {
-  console.log("content -1: ", e);
+  console.log("content-script's initialization failed", e);
 }

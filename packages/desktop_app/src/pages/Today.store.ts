@@ -28,7 +28,6 @@ export function reducer(state: iTodayState, action: iAction) {
                 ...i,
                 saved_at: new Date(i.saved_at),
             }));
-            console.log(items);
             return { ...state, items };
         case "set_initialized":
             return { ...state, initialized: action.payload };
