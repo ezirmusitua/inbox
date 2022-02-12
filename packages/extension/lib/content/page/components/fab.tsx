@@ -2,33 +2,31 @@ import { useContext } from "react";
 import Context from "../context";
 import Service from "../service";
 import { eActionType, eReadingModeStage } from "../store";
-import ModeSelector from "./mode_selector";
+import ModeSelector from "./ModeSelector";
 
 function Button({ onClick, label, bg }: any) {
   const className = [
-    "py-2",
-    "rounded-full",
     "h-12",
     "w-12",
-    "shadow-md",
-    `bg-${bg}-500`,
+    "py-2",
     "flex",
     "justify-center",
     "items-center",
+    "rounded-full",
+    "shadow-md",
     "cursor-pointer",
   ];
+  if (bg) {
+    className.push(`bg-${bg}-500`);
+  } else {
+    className.push("bg-blue-500");
+  }
+
   return (
     <div className={className.join(" ")} onClick={onClick}>
       <span className="text-white">{label}</span>
     </div>
   );
-}
-
-function save_article() {
-  fetch("http://localhost:31312/api/article/temporary", {
-    method: "POST",
-    headers: {},
-  });
 }
 
 export default function Fab() {

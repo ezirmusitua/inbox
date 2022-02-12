@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import { render } from "react-dom";
-import Fab from "./components/fab";
-import Toolbar from "./components/toolbar";
+import Fab from "./components/Fab";
+import Toolbar from "./components/Toolbar";
 import Context from "./context";
 import Service from "./service";
 import { init_state, reducer } from "./store";
@@ -26,7 +26,6 @@ export default function mount_view(api: Record<string, any>) {
   const service = new Service();
   service.set_api(api);
   mount_point.setAttribute("id", RM_MOUNTED_ID);
-  const body = document.querySelector("body");
   document.querySelector("body").appendChild(mount_point);
   render(<ReadingModeTool />, mount_point);
 }
