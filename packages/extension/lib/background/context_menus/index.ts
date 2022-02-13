@@ -1,10 +1,10 @@
 import Repo from "../repo";
 import {
-  MenuItemClickHandler,
-  MenuItemDef,
-  MENU_ITEM_ID,
+  SendSelectionHandler,
+  SendSelectionItemDef,
+  SEND_SELECTION_MENU_ITEM_ID,
   append_id_to,
-} from "./item";
+} from "./send_selection";
 
 export class ContextMenu {
   static instance: ContextMenu = null as any;
@@ -12,20 +12,25 @@ export class ContextMenu {
 
   constructor(private readonly _repo: Repo) {
     if (!ContextMenu.instance) {
-      this._handlers[MENU_ITEM_ID] = new MenuItemClickHandler(this._repo);
+      this._handlers[SEND_SELECTION_MENU_ITEM_ID] = new SendSelectionHandler(
+        this._repo
+      );
       ContextMenu.instance = this;
     }
     return ContextMenu.instance;
   }
 
   init() {
-    chrome.contextMenus.create(append_id_to(MenuItemDef));
+    chrome.contextMenus.create(append_id_to(SendSelectionItemDef));
     chrome.contextMenus.onClicked.addListener((info, tabs) =>
-      this._handlers[MENU_ITEM_ID].handle(info, tabs)
+      this._handlers[SEND_SELECTION_MENU_ITEM_ID].handle(info, tabs)
     );
   }
 
   update() {
-    chrome.contextMenus.update(MENU_ITEM_ID, MenuItemDef);
+    chrome.contextMenus.update(
+      SEND_SELECTION_MENU_ITEM_ID,
+      SendSelectionItemDef
+    );
   }
 }

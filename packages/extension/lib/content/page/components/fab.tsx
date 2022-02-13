@@ -6,25 +6,26 @@ import ModeSelector from "./ModeSelector";
 
 function Button({ onClick, label, bg }: any) {
   const className = [
-    "h-12",
-    "w-12",
-    "py-2",
-    "flex",
-    "justify-center",
-    "items-center",
-    "rounded-full",
-    "shadow-md",
-    "cursor-pointer",
+    "_ibe-box-border",
+    "_ibe-h-12",
+    "_ibe-w-12",
+    "_ibe-py-2",
+    "_ibe-flex",
+    "_ibe-justify-center",
+    "_ibe-items-center",
+    "_ibe-rounded-full",
+    "_ibe-shadow-md",
+    "_ibe-cursor-pointer",
   ];
   if (bg) {
-    className.push(`bg-${bg}-500`);
+    className.push(`_ibe-bg-${bg}-500`);
   } else {
-    className.push("bg-blue-500");
+    className.push("_ibe-bg-blue-500");
   }
 
   return (
     <div className={className.join(" ")} onClick={onClick}>
-      <span className="text-white">{label}</span>
+      <span className="_ibe-text-white">{label}</span>
     </div>
   );
 }
@@ -32,21 +33,27 @@ function Button({ onClick, label, bg }: any) {
 export default function Fab() {
   const ctx = useContext(Context);
   const service = new Service();
-  const className = ["z-50", "fixed", "right-4", "bottom-1/2"];
+  const className = [
+    "_ibe-box-border",
+    "_ibe-z-50",
+    "_ibe-fixed",
+    "_ibe-right-4",
+    "_ibe-bottom-1/2",
+  ];
   const in_reading_mode = ctx.state.stage === eReadingModeStage.VIEWING;
   return (
     <div className={className.join(" ")}>
       {!in_reading_mode && (
-        <div className="py-1">
+        <div className="_ibe-box-border _ibe-py-1">
           <ModeSelector>
-            <div className="bg-yellow-500 rounded-full">
+            <div className="_ibe-bg-yellow-500 _ibe-rounded-full">
               <Button label="R" bg="yellow" onClick={null}></Button>
             </div>
           </ModeSelector>
         </div>
       )}
       {!in_reading_mode && (
-        <div className="py-1">
+        <div className="_ibe-box-border _ibe-py-1">
           <Button
             label="E"
             bg="blue"
@@ -60,7 +67,7 @@ export default function Fab() {
         </div>
       )}
       {in_reading_mode && (
-        <div className="py-1">
+        <div className="_ibe-box-border _ibe-py-1">
           <Button
             label="S"
             bg="green"

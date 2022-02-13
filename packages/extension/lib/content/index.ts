@@ -1,5 +1,5 @@
 import { CONNECTION_NAME, EXTENSION_CONTENT_BTN_ID } from "@inbox/shared";
-import api from "./domain/api";
+import api from "../domain/api";
 import { EventHandler } from "./event";
 import mount_view from "./page";
 
@@ -92,6 +92,12 @@ try {
   const cs = new ContentScript();
   cs.register(new EventHandler());
   cs.mount_view(api);
+  // FIXME: move to patch
+  // fix uisdc html font-size
+  // eslint-disable-next-line
+  if (location.href.includes("uisdc.com")) {
+    document.querySelector("html").style.fontSize = "14px";
+  }
 } catch (e) {
   console.log("content-script's initialization failed", e);
 }

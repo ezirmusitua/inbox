@@ -3,11 +3,10 @@ import {
   OnApplicationBootstrap,
   OnApplicationShutdown,
 } from "@nestjs/common";
-import { DateTime, Duration } from "luxon";
 import { SettingService } from "setting/service";
 import { ArticleEntity } from "./domain/agg/entity";
 import { Printer } from "./domain/agg/pdf";
-import { SaveArticleDto } from "./dto";
+import { MakeSnippetDto, SaveArticleDto } from "./dto";
 
 const MAX_BACK_TRACE_DAYS = 365;
 
@@ -34,12 +33,9 @@ export class ArticleService
 
   async save_article(article: SaveArticleDto) {
     const entity = this.get_today_entity();
-    const result = await entity.add_article([
-      { ...article, saved_at: new Date() },
-    ]);
-    entity.save();
+    await entity.upsert_article([{ ...article, saved_at: new Date() }]);
     this.refresh_summary();
-    return { data: result.data, status: 1 };
+    return { data: entity.data, status: 1 };
   }
 
   refresh_summary() {
@@ -53,9 +49,8 @@ export class ArticleService
         fp,
         setting.logseq_asset_dir_path,
       );
-      summary_entity.add_article(daily_entity.article);
+      summary_entity.upsert_article(daily_entity.article);
     }
-    summary_entity.save();
     return { data: summary_entity.data, status: 1 };
   }
 
@@ -73,15 +68,18 @@ export class ArticleService
     const summary_entity = this.get_summary_entity();
     const target = summary_entity.remove_article(url_hash);
     if (target) {
-      summary_entity.save();
       const day_entity = ArticleEntity.read_from_file(
         target._day_file,
         setting.logseq_asset_dir_path,
       );
       day_entity.remove_article(url_hash);
-      day_entity.save();
     }
     return { status: 1 };
+  }
+
+  make_snippet(dto: MakeSnippetDto) {
+    const summary_entity = this.get_summary_entity();
+    summary_entity.make_snippet(dto.url, dto.title, dto.selection);
   }
 
   private get_today_entity() {

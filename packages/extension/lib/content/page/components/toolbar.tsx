@@ -4,15 +4,16 @@ import { eActionType, eReadingModeStage } from "../store";
 
 function Button({ label, onClick, bg }: any) {
   const className = [
-    "cursor-pointer",
-    "py-2",
-    "px-4",
-    `bg-${bg}-500`,
-    "hover:bg-opacity-70",
+    "_ibe-box-border",
+    "_ibe-cursor-pointer",
+    "_ibe-py-2",
+    "_ibe-px-4",
+    `_ibe-bg-${bg}-500`, // TODO: do not use concat
+    "_ibe-hover:bg-opacity-70",
   ];
   return (
     <div className={className.join(" ")} onClick={onClick}>
-      <span className="text-md text-white">{label}</span>
+      <span className="_ibe-text-md _ibe-text-white">{label}</span>
     </div>
   );
 }
@@ -20,7 +21,7 @@ export default function Toolbar() {
   const ctx = useContext(Context);
   if (ctx.state.stage !== eReadingModeStage.EDITING) return null;
   return (
-    <div className="z-50 fixed top-0 left-0 right-0 p-2 flex justify-end bg-gray-800 border-bottom shadow-sm shadow-gray-200">
+    <div className="_ibe-box-border _ibe-z-50 _ibe-fixed _ibe-top-0 _ibe-left-0 _ibe-right-0 _ibe-p-2 _ibe-flex _ibe-justify-end _ibe-bg-gray-800 _ibe-border-bottom _ibe-shadow-sm _ibe-shadow-gray-200">
       <Button
         label="Cancel"
         onClick={() =>

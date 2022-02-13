@@ -1,6 +1,6 @@
 export default function Container({ children }: any) {
   return (
-    <div className="relative" style={{ width: "240px" }}>
+    <div className="_ibe-relative" style={{ width: "240px" }}>
       {children}
     </div>
   );
@@ -8,7 +8,7 @@ export default function Container({ children }: any) {
 
 export function ContentContainer({ children }: any) {
   return (
-    <div className="w-full p-4 flex flex-col item-center bg-white">
+    <div className="_ibe-w-full _ibe-p-4 _ibe-flex _ibe-flex-col _ibe-item-center _ibe-bg-white">
       {children}
     </div>
   );

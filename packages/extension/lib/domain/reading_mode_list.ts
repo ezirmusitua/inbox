@@ -1,12 +1,12 @@
-import INFOQ_PRESET from "../data/infoq";
-import USIDC_PRESET from "../data/usidc";
-import _36KR_PRESET from "../data/_36kr";
-import GCORES_PRESET from "../data/gcores";
-import WOSHIPM_PRESET from "../data/woshipm";
-import LEIPHONE_PRESET from "../data/leiphone";
-import SSPAI_PRESET from "../data/sspai";
-import THOUGHTWORKS_CN_PRESET from "../data/thoughworks_cn";
-import GITHUB_PRESET from "../data/github";
+import INFOQ_PRESET from "./preset/infoq";
+import USIDC_PRESET from "./preset/usidc";
+import _36KR_PRESET from "./preset/_36kr";
+import GCORES_PRESET from "./preset/gcores";
+import WOSHIPM_PRESET from "./preset/woshipm";
+import LEIPHONE_PRESET from "./preset/leiphone";
+import SSPAI_PRESET from "./preset/sspai";
+import THOUGHTWORKS_CN_PRESET from "./preset/thoughworks_cn";
+import GITHUB_PRESET from "./preset/github";
 
 export default class ReadingModeList {
   private readonly _list = [

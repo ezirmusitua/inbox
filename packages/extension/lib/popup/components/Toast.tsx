@@ -37,15 +37,15 @@ function ErrorToast() {
   return (
     <Transition
       show={!!msg}
-      enter="transition-all duration-300"
-      enterFrom="opacity-0 h-0"
-      enterTo="opacity-100 h-auto"
-      leave="transition-all duration-150"
-      leaveFrom="opacity-100 h-auto"
-      leaveTo="opacity-0 h-0"
+      enter="_ibe-transition-all _ibe-duration-300"
+      enterFrom="_ibe-opacity-0 _ibe-h-0"
+      enterTo="_ibe-opacity-100 _ibe-h-auto"
+      leave="_ibe-transition-all _ibe-duration-150"
+      leaveFrom="_ibe-opacity-100 _ibe-h-auto"
+      leaveTo="_ibe-opacity-0 _ibe-h-0"
     >
       <div
-        className="p-2 absolute right-0 bg-red-400 flex justify-center"
+        className="_ibe-p-2 _ibe-absolute _ibe-right-0 _ibe-bg-red-400 _ibe-flex _ibe-justify-center"
         style={{
           left: "2px",
           top: "2px",
@@ -53,7 +53,7 @@ function ErrorToast() {
           opacity: !msg ? "0" : "1",
         }}
       >
-        <span className="text-white">{msg}</span>
+        <span className="_ibe-text-white">{msg}</span>
       </div>
     </Transition>
   );

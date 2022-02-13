@@ -7,14 +7,14 @@ function Input({
   style = {},
 }: any) {
   const _className = [
-    "bg-gray-200",
-    "text-lg",
-    "border-box",
-    "w-full",
-    "py-2",
-    "px-2",
-    "focus:outline-blue-500",
-    "focus:border-blue-500",
+    "_ibe-bg-gray-200",
+    "_ibe-text-lg",
+    "_ibe-border-box",
+    "_ibe-w-full",
+    "_ibe-py-2",
+    "_ibe-px-2",
+    "_ibe-focus:outline-blue-500",
+    "_ibe-focus:border-blue-500",
     ...className,
   ];
   return (

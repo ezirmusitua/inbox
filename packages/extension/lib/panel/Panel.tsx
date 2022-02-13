@@ -1,6 +1,6 @@
 function Panel() {
   return (
-    <div className="container">
+    <div className="_ibe-container">
       <h1>Dev Tools Panel</h1>
     </div>
   );

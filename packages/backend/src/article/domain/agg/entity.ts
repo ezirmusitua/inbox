@@ -39,6 +39,54 @@ export class ArticleEntity {
     return this._data.find((article) => article._url_hash === url_hash);
   }
 
+  async upsert_article(article: iArticle[]) {
+    for (const item of article) {
+      const url_hash = md5(item.url);
+      const existed = this.get_article(url_hash);
+      if (existed) {
+        this.update_article(item);
+      } else {
+        this.add_article(item);
+      }
+    }
+  }
+
+  async add_article(item: iArticle) {
+    const url_hash = md5(item.url);
+    if (!this._url_hash_set.has(url_hash)) {
+      item._url_hash = item._url_hash || url_hash;
+      item._day_file = item._day_file || this._path;
+      this._data.push(item);
+      this._url_hash_set.add(url_hash);
+      await this.update_article(item);
+    }
+  }
+
+  async update_article(new_one: iArticle, old_one?: iArticle) {
+    // TODO: save content hash
+    // TODO: compare new_one.content with old_one, if same, do not generate pdf
+    if (new_one.content && !new_one.pdf) {
+      const pdf = new Pdf(new_one.content);
+      const buffer = await pdf.generate();
+      const pdf_name = `${DateTime.fromJSDate(new_one.saved_at).toFormat(
+        "yyyy_MM_dd",
+      )}-${new_one.title}.pdf`;
+      new_one.pdf = `SOURCE: ![${new_one.title.replace(
+        / /g,
+        "_",
+      )}.pdf](../assets/${pdf_name})`;
+      this.save_pdf(buffer, pdf_name);
+    }
+    this._data = this._data.map((item) => {
+      if (item._url_hash !== new_one._url_hash) return item;
+      return new_one;
+    });
+    this._data = this._data.sort(
+      (p, n) => n.saved_at.getTime() - p.saved_at.getTime(),
+    );
+    this.save();
+  }
+
   remove_article(url_hash: string) {
     const index = this._data.findIndex(
       (article) => article._url_hash === url_hash,
@@ -49,48 +97,27 @@ export class ArticleEntity {
       this.remove_pdf(removed.pdf);
     }
     this._url_hash_set = new Set<string>(this._data.map((d) => d._url_hash));
+    this.save();
     return removed;
   }
 
-  async add_article(article: iArticle[]) {
-    for (const item of article) {
-      const url_hash = md5(item.url);
-      if (!this._url_hash_set.has(url_hash)) {
-        item._url_hash = item._url_hash || url_hash;
-        item._day_file = item._day_file || this._path;
-        if (item.content && !item.pdf) {
-          const pdf = new Pdf(item.content);
-          const buffer = await pdf.generate();
-          const pdf_name = `${DateTime.fromJSDate(item.saved_at).toFormat(
-            "yyyy_MM_dd",
-          )}-${item.title}.pdf`;
-          item.pdf = `SOURCE: ![${item.title.replace(
-            / /g,
-            "_",
-          )}.pdf](../assets/${pdf_name})`;
-          this.save_pdf(buffer, pdf_name);
-        }
-        this._data.push(item);
-        this._data.sort((p, n) => n.saved_at.getTime() - p.saved_at.getTime());
-        this._url_hash_set.add(url_hash);
-      }
+  async make_snippet(url: string, title: string, selection: string) {
+    const _url_hash = md5(url);
+    const article = this.get_article(_url_hash);
+    if (!article) {
+      this.add_article({
+        title,
+        url,
+        _url_hash: _url_hash,
+        saved_at: new Date(),
+        notes: [selection],
+      });
+    } else {
+      const new_notes = [...(article.notes || []), selection];
+      await this.update_article({ ...article, notes: new_notes }, article);
     }
-    return this;
-  }
-
-  save_pdf(content: Buffer, name: string) {
-    fs.writeFileSync(path.join(this.asset_dir, name), content);
-  }
-
-  remove_pdf(pdf_uri: string) {
-    const asset_name = /^SOURCE: !\[(.*)\]\(\.\.\/assets\/(.*)\)$/.exec(
-      pdf_uri,
-    )[2];
-    console.log("to remove asset: ", asset_name);
-    const asset_path = path.join(this.asset_dir, asset_name);
-    if (fs.existsSync(asset_path)) {
-      fs.unlinkSync(asset_path);
-    }
+    console.log("article snippet to save: ", article);
+    this.save();
   }
 
   save() {
@@ -105,10 +132,26 @@ export class ArticleEntity {
             article.url,
             article.saved_at,
             article.pdf,
+            (article.notes || []).join("\n"),
           ],
         })),
       ),
     );
+  }
+
+  private save_pdf(content: Buffer, name: string) {
+    fs.writeFileSync(path.join(this.asset_dir, name), content);
+  }
+
+  private remove_pdf(pdf_uri: string) {
+    const asset_name = /^SOURCE: !\[(.*)\]\(\.\.\/assets\/(.*)\)$/.exec(
+      pdf_uri,
+    )[2];
+    console.log("to remove asset: ", asset_name);
+    const asset_path = path.join(this.asset_dir, asset_name);
+    if (fs.existsSync(asset_path)) {
+      fs.unlinkSync(asset_path);
+    }
   }
 
   static read_from_file(path: string, asset_dir: string) {
@@ -134,6 +177,7 @@ export class ArticleEntity {
         url: children[2].content.slice(2),
         saved_at: new Date(children[3].content.slice(2)),
         pdf: children[4]?.content?.slice(2),
+        notes: children[5]?.content?.slice(2).split("\n"),
       };
     });
   }

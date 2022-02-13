@@ -12,7 +12,7 @@ export const RM_MOUNTED_ID = "__reading_mode_view_mount_point";
 function ReadingModeTool() {
   const [state, dispatch] = useReducer(reducer, init_state);
   return (
-    <div>
+    <div className="_ibe-box-border">
       <Context.Provider value={{ state, dispatch }}>
         <Fab></Fab>
         <Toolbar></Toolbar>

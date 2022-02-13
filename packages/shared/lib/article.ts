@@ -7,6 +7,7 @@ export interface iArticlePayload {
 export interface iArticle extends iArticlePayload {
     _url_hash?: string;
     _day_file?: string;
+    notes?: string[];
     pdf?: string;
     saved_at: Date;
 }

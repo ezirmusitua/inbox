@@ -1,7 +1,9 @@
 import { EXTENSION_CONTENT_BTN_ID } from "@inbox/shared";
-import { RM_MOUNTED_ID } from "../page";
 import { ORIGIN_CONTAINER_CLS_NAME } from "./constant";
 import { iReadingMode, iReadingModeDef } from "./interface";
+
+// TODO: move RM_MOUNTED_ID to @inbox/shared
+const RM_MOUNTED_ID = "__reading_mode_view_mount_point";
 
 export class ReadingMode implements iReadingMode {
   static instance: ReadingMode = null as any;

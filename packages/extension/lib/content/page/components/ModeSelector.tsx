@@ -8,15 +8,16 @@ import { eActionType, eReadingModeStage } from "../store";
 
 function ModeItem({ item, last }: any) {
   let className = [
-    "py-2",
-    "px-4",
-    "hover:bg-blue-500",
-    "w-max",
-    "cursor-pointer",
+    "_ibe-box-border",
+    "_ibe-py-2",
+    "_ibe-px-4",
+    "_ibe-hover:bg-blue-500",
+    "_ibe-w-max",
+    "_ibe-cursor-pointer",
   ];
   if (!last) {
-    className.push("border-b-2");
-    className.push("border-gray-200");
+    className.push("_ibe-border-b-2");
+    className.push("_ibe-border-gray-200");
   }
   return (
     <RadioGroup.Option value={item.id}>
@@ -24,10 +25,10 @@ function ModeItem({ item, last }: any) {
         <div
           className={[
             ...className,
-            (checked && "bg-blue-400") || "bg-blue-300",
+            (checked && "_ibe-bg-blue-400") || "_ibe-bg-blue-300",
           ].join(" ")}
         >
-          <span className="text-white" style={{ minWidth: "120px" }}>
+          <span className="_ibe-text-white" style={{ minWidth: "120px" }}>
             {item.name}
           </span>
         </div>
@@ -45,9 +46,9 @@ function ModeList() {
     set_items(items);
   }, []);
   return (
-    <div className="px-4">
+    <div className="_ibe-box-border _ibe-px-4">
       <RadioGroup
-        className="shadow-md rounded-md overflow-hidden"
+        className="_ibe-shadow-md _ibe-rounded-md _ibe-overflow-hidden"
         value={ctx.state.mode}
         onChange={(mode) => {
           service.use_reading_mode(mode);
@@ -75,8 +76,13 @@ export default function ModeSelector({ children }: any) {
   const [popper_element, set_popper_element] = useState(null as any);
   const { styles, attributes } = usePopper(trigger_element, popper_element);
   return (
-    <Popover className="relative">
-      <Popover.Button ref={set_trigger_element}>{children}</Popover.Button>
+    <Popover className="_ibe-relative">
+      <Popover.Button
+        className="_ibe-border-none _ibe-px-0 _ibe-bg-transparent"
+        ref={set_trigger_element}
+      >
+        {children}
+      </Popover.Button>
       <Popover.Panel
         ref={set_popper_element}
         style={styles.popper}

@@ -25,7 +25,7 @@ export default {
     }
   },
 
-  send_to_inbox(mode: string) {
+  async send_to_inbox(mode: string) {
     try {
       const def = list.get_mode_def(mode);
       if (!def) return def;
@@ -37,13 +37,26 @@ export default {
       mount.appendChild(elem_cpy);
       const content = mount.innerHTML;
       mount.remove();
-      fetch("http://localhost:31312/api/article", {
+      await fetch("http://localhost:31312/api/article", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url, title, content }),
       });
     } catch (e) {
       console.log("content-script api[send_to_inbox]: ", e);
+    }
+  },
+
+  async make_snippet(url: string, title: string, selection: string) {
+    console.log("call make snippet");
+    try {
+      await fetch("http://localhost:31312/api/article/snippet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url, title, selection }),
+      });
+    } catch (e) {
+      console.log("content-script api[make_snippet]: ", e);
     }
   },
 };

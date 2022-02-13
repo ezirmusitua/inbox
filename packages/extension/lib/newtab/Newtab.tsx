@@ -1,7 +1,7 @@
 const Newtab = () => {
   return (
-    <div className="App w-screen h-screen">
-      <header className="App-header">Inbox</header>
+    <div className="_ibe-w-screen _ibe-h-screen">
+      <header className="_ibe-text-lg">Inbox</header>
     </div>
   );
 };

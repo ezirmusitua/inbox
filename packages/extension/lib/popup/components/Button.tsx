@@ -1,10 +1,10 @@
 const ButtonBaseClassNames = [
-  "p-2",
-  "outline-none",
-  "border",
-  "cursor-pointer",
-  "hover:bg-opacity-80",
-  "text-lg",
+  "_ibe-p-2",
+  "_ibe-outline-none",
+  "_ibe-border",
+  "_ibe-cursor-pointer",
+  "_ibe-hover:bg-opacity-80",
+  "_ibe-text-lg",
 ];
 
 export function Button({
@@ -18,16 +18,16 @@ export function Button({
 }: any) {
   const classNames = [...ButtonBaseClassNames, ...className];
   if (block) {
-    classNames.push("w-full");
+    classNames.push("_ibe-w-full");
   }
   if (primary) {
-    classNames.push("bg-blue-500");
-    classNames.push("text-white");
+    classNames.push("_ibe-bg-blue-500");
+    classNames.push("_ibe-text-white");
   } else if (danger) {
-    classNames.push("bg-red-500");
-    classNames.push("text-white");
+    classNames.push("_ibe-bg-red-500");
+    classNames.push("_ibe-text-white");
   } else {
-    classNames.push("text-black");
+    classNames.push("_ibe-text-black");
   }
   return (
     <button className={classNames.join(" ")} style={style} onClick={onClick}>

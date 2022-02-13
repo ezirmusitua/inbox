@@ -10,7 +10,7 @@ import {
   Put,
   Query,
 } from "@nestjs/common";
-import { SaveArticleDto } from "./dto";
+import { MakeSnippetDto, SaveArticleDto } from "./dto";
 import { ArticleService } from "./service";
 
 @Controller("api/article")
@@ -39,7 +39,11 @@ export class ArticleController {
 
   @Delete("/:url_hash")
   remove(@Param("url_hash") url_hash: string) {
-    console.log(url_hash);
     return this.service.remove_article(url_hash);
+  }
+
+  @Post("/snippet")
+  make_snippet(@Body() payload: MakeSnippetDto) {
+    return this.service.make_snippet(payload);
   }
 }
