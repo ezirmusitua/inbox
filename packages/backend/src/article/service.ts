@@ -4,8 +4,9 @@ import {
   OnApplicationShutdown,
 } from "@nestjs/common";
 import { SettingService } from "setting/service";
-import { ArticleEntity } from "./domain/agg/entity";
+import { ArticlePageEntity } from "./domain/agg/entity";
 import { Printer } from "./domain/agg/pdf";
+import { SummaryService } from "./domain/summary.service";
 import { MakeSnippetDto, SaveArticleDto } from "./dto";
 
 const MAX_BACK_TRACE_DAYS = 365;
@@ -14,6 +15,8 @@ const MAX_BACK_TRACE_DAYS = 365;
 export class ArticleService
   implements OnApplicationShutdown, OnApplicationBootstrap
 {
+  private _summary = new SummaryService(this.setting);
+
   constructor(private readonly setting: SettingService) {}
 
   async onApplicationBootstrap() {
@@ -39,38 +42,23 @@ export class ArticleService
   }
 
   refresh_summary() {
-    const summary_entity = this.get_summary_entity();
-    const setting = this.setting.get_setting();
-    const daily_path = setting.all_article_path.filter(
-      (p) => p !== setting.article_summary_path,
-    );
-    for (const fp of daily_path) {
-      const daily_entity = ArticleEntity.read_from_file(
-        fp,
-        setting.logseq_asset_dir_path,
-      );
-      summary_entity.upsert_article(daily_entity.article);
-    }
-    return { data: summary_entity.data, status: 1 };
+    const data = this._summary.refresh_summary();
+    return { data, status: 1 };
   }
 
   list_article() {
-    const setting = this.setting.get_setting();
-    const summary_entity = ArticleEntity.read_from_file(
-      setting.article_summary_path,
-      setting.logseq_asset_dir_path,
-    );
-    return { data: summary_entity.data, status: 1 };
+    const data = this._summary.list();
+    return { data, status: 1 };
   }
 
   remove_article(url_hash: string) {
     const setting = this.setting.get_setting();
-    const summary_entity = this.get_summary_entity();
-    const target = summary_entity.remove_article(url_hash);
+    const target = this._summary.remove_article(url_hash);
     if (target) {
-      const day_entity = ArticleEntity.read_from_file(
+      const day_entity = ArticlePageEntity.read_from_file(
         target._day_file,
         setting.logseq_asset_dir_path,
+        setting.logseq_journal_dir_path,
       );
       day_entity.remove_article(url_hash);
     }
@@ -78,23 +66,17 @@ export class ArticleService
   }
 
   make_snippet(dto: MakeSnippetDto) {
-    const summary_entity = this.get_summary_entity();
+    const summary_entity = this._summary.get_entity();
     summary_entity.make_snippet(dto.url, dto.title, dto.selection);
+    // TODO: each article should be saved to a file.
   }
 
   private get_today_entity() {
     const setting = this.setting.get_setting();
-    return ArticleEntity.read_from_file(
+    return ArticlePageEntity.read_from_file(
       setting.today_article_path,
       setting.logseq_asset_dir_path,
-    );
-  }
-
-  private get_summary_entity() {
-    const setting = this.setting.get_setting();
-    return ArticleEntity.read_from_file(
-      setting.article_summary_path,
-      setting.logseq_asset_dir_path,
+      setting.logseq_journal_dir_path,
     );
   }
 }

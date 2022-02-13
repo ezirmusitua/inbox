@@ -25,6 +25,10 @@ export class SettingEntity {
     return path.join(this._data.logseq.root, "assets");
   }
 
+  get logseq_journal_dir_path() {
+    return path.join(this._data.logseq.root, "journals");
+  }
+
   get today_article_path() {
     const now = new Date();
     return this.concat_day_path(now);

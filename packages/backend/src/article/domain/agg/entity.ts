@@ -1,16 +1,16 @@
-import * as fs from "fs";
-import * as path from "path";
+import { iArticle, iStructuredContent } from "@inbox/shared";
 import * as crypto from "crypto";
-import { join_indent, parse_indent } from "utils";
-import { iArticle, iArticlePayload, iStructuredContent } from "@inbox/shared";
-import { Pdf } from "./pdf";
+import * as fs from "fs";
 import { DateTime } from "luxon";
+import * as path from "path";
+import { join_indent, parse_indent } from "utils";
+import { Pdf } from "./pdf";
 
 function md5(content: string) {
   return crypto.createHash("md5").update(content).digest("base64url");
 }
 
-export class ArticleEntity {
+export class ArticlePageEntity {
   public readonly _title = this._path.split(path.sep).pop();
   private _url_hash_set = new Set<string>(this._data.map((d) => d._url_hash));
 
@@ -18,7 +18,12 @@ export class ArticleEntity {
     private readonly _path: string,
     private _data: iArticle[],
     private asset_dir: string,
+    private journal_dir: string,
   ) {}
+
+  get is_daily() {
+    return this._title.split("-").length === 2;
+  }
 
   get data() {
     return {
@@ -59,6 +64,22 @@ export class ArticleEntity {
       this._data.push(item);
       this._url_hash_set.add(url_hash);
       await this.update_article(item);
+    }
+  }
+
+  private append_to_journal() {
+    if (!this.is_daily) return;
+    const journal_name = this._title.slice(0, 10);
+    const journal_path = path.join(this.journal_dir, `${journal_name}.md`);
+    if (!fs.existsSync(journal_path)) {
+      fs.writeFileSync(journal_path, "");
+    }
+    let journal_content = fs.readFileSync(journal_path).toString();
+    // TODO: maybe make a copy at first?
+    if (!journal_content.includes(this._title)) {
+      journal_content += "\n- INBOX";
+      journal_content += `\n	- [[${this._title}]]`;
+      fs.writeFileSync(journal_path, journal_content);
     }
   }
 
@@ -116,12 +137,11 @@ export class ArticleEntity {
       const new_notes = [...(article.notes || []), selection];
       await this.update_article({ ...article, notes: new_notes }, article);
     }
-    console.log("article snippet to save: ", article);
     this.save();
   }
 
-  save() {
-    return fs.writeFileSync(
+  private save() {
+    fs.writeFileSync(
       this._path,
       join_indent(
         this._data.map((article) => ({
@@ -137,6 +157,7 @@ export class ArticleEntity {
         })),
       ),
     );
+    this.append_to_journal();
   }
 
   private save_pdf(content: Buffer, name: string) {
@@ -147,24 +168,24 @@ export class ArticleEntity {
     const asset_name = /^SOURCE: !\[(.*)\]\(\.\.\/assets\/(.*)\)$/.exec(
       pdf_uri,
     )[2];
-    console.log("to remove asset: ", asset_name);
     const asset_path = path.join(this.asset_dir, asset_name);
     if (fs.existsSync(asset_path)) {
       fs.unlinkSync(asset_path);
     }
   }
 
-  static read_from_file(path: string, asset_dir: string) {
+  static read_from_file(path: string, asset_dir: string, journal_dir: string) {
     try {
       const content = fs.readFileSync(path).toString();
       const structured = parse_indent(content);
-      return new ArticleEntity(
+      return new ArticlePageEntity(
         path,
-        ArticleEntity.convert_to_article(structured),
+        ArticlePageEntity.convert_to_article(structured),
         asset_dir,
+        journal_dir,
       );
     } catch (e) {
-      return new ArticleEntity(path, [], asset_dir);
+      return new ArticlePageEntity(path, [], asset_dir, journal_dir);
     }
   }
 

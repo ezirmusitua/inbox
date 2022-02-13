@@ -2,6 +2,7 @@
 mkdir -p .mock/{.inbox,Users}
 mkdir -p .mock/Users/jz/Applications/logseq/{assets,draws,journals,logseq,pages}
 touch .mock/.inbox/settings.json
+touch .mock/Users/jz/Applications/logseq/journals/2022_02_13.md
 
 echo '{
   "app": {
