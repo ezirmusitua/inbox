@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
-import { iAppSetting } from "@inbox/shared";
+import { iSetting } from "@inbox/shared";
 
 export class SettingEntity {
-  constructor(private readonly _data: iAppSetting) {}
+  constructor(private readonly _data: iSetting) {}
 
   get setting_dir() {
     return path.join(this._data.device.document_dir, `.${this._data.app.name}`);
@@ -15,6 +15,14 @@ export class SettingEntity {
 
   get logseq_dir_path() {
     return this._data.logseq.root;
+  }
+
+  logseq_page_path(target: string) {
+    return path.join(this._data.logseq.root, "pages", target);
+  }
+
+  logseq_asset_path(target: string) {
+    return path.join(this._data.logseq.root, "assets", target);
   }
 
   get logseq_page_dir_path() {
@@ -49,7 +57,7 @@ export class SettingEntity {
     return this._data.backend.browser_bin;
   }
 
-  update_setting(setting: iAppSetting) {
+  update_setting(setting: iSetting) {
     this._data.logseq = setting.logseq;
     this._data.backend = setting.backend;
     this._data.app = setting.app;

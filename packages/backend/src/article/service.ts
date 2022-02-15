@@ -3,21 +3,32 @@ import {
   OnApplicationBootstrap,
   OnApplicationShutdown,
 } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { PageService } from "page/service";
+import { sArticle } from "schema/article";
+import { sArticleClip } from "schema/clip";
 import { SettingService } from "setting/service";
-import { ArticlePageEntity } from "./domain/agg/entity";
+import { Repository } from "typeorm";
 import { Printer } from "./domain/agg/pdf";
-import { SummaryService } from "./domain/summary.service";
+import { ArticleAggRepo } from "./domain/agg/repo";
 import { MakeSnippetDto, SaveArticleDto } from "./dto";
-
-const MAX_BACK_TRACE_DAYS = 365;
 
 @Injectable()
 export class ArticleService
   implements OnApplicationShutdown, OnApplicationBootstrap
 {
-  private _summary = new SummaryService(this.setting);
+  private _article_agg_repo = new ArticleAggRepo(
+    this._article_repo,
+    this._clip_repo,
+  );
 
-  constructor(private readonly setting: SettingService) {}
+  constructor(
+    @InjectRepository(sArticle)
+    private readonly _article_repo: Repository<sArticle>,
+    private readonly _clip_repo: Repository<sArticleClip>,
+    private readonly page: PageService,
+    private readonly setting: SettingService,
+  ) {}
 
   async onApplicationBootstrap() {
     const browser_path = this.setting.get_setting().browser_path;
@@ -29,54 +40,28 @@ export class ArticleService
     await new Printer(browser_path).destroy();
   }
 
-  get_today_article() {
-    const entity = this.get_today_entity();
-    return { data: entity.data, status: 1 };
-  }
-
   async save_article(article: SaveArticleDto) {
-    const entity = this.get_today_entity();
-    await entity.upsert_article([{ ...article, saved_at: new Date() }]);
-    this.refresh_summary();
-    return { data: entity.data, status: 1 };
-  }
-
-  refresh_summary() {
-    const data = this._summary.refresh_summary();
-    return { data, status: 1 };
-  }
-
-  list_article() {
-    const data = this._summary.list();
-    return { data, status: 1 };
-  }
-
-  remove_article(url_hash: string) {
     const setting = this.setting.get_setting();
-    const target = this._summary.remove_article(url_hash);
-    if (target) {
-      const day_entity = ArticlePageEntity.read_from_file(
-        target._day_file,
-        setting.logseq_asset_dir_path,
-        setting.logseq_journal_dir_path,
-      );
-      day_entity.remove_article(url_hash);
-    }
+    const entity = await this._article_agg_repo.ensure_entity(article, setting);
+    await entity.save(article.content);
+    await this.page.add_article(entity.data);
     return { status: 1 };
   }
 
-  make_snippet(dto: MakeSnippetDto) {
-    const summary_entity = this._summary.get_entity();
-    summary_entity.make_snippet(dto.url, dto.title, dto.selection);
-    // TODO: each article should be saved to a file.
+  async remove_article(id: number) {
+    const setting = this.setting.get_setting();
+    const entity = await this._article_agg_repo.get_entity(id, setting);
+    await entity.remove();
+    await this.page.remove_article(entity.data);
+    return { status: 1 };
   }
 
-  private get_today_entity() {
+  async make_snippet(dto: MakeSnippetDto) {
     const setting = this.setting.get_setting();
-    return ArticlePageEntity.read_from_file(
-      setting.today_article_path,
-      setting.logseq_asset_dir_path,
-      setting.logseq_journal_dir_path,
+    const entity = await this._article_agg_repo.ensure_entity(
+      { url: dto.url, title: dto.title },
+      setting,
     );
+    await entity.make_clip(dto.selection);
   }
 }

@@ -1,5 +1,5 @@
 import { SettingService } from "setting/service";
-import { ArticlePageEntity } from "./agg/entity";
+import { ArticlePageEntity } from "../../article/domain/agg/entity";
 
 export class SummaryService {
   constructor(private readonly _setting: SettingService) {}
