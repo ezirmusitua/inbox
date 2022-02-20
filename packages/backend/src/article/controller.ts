@@ -25,6 +25,6 @@ export class ArticleController {
 
   @Post("/clip")
   make_clip(@Body() dto: MakeSnippetDto) {
-    return this.service.make_snippet(dto);
+    return this.service.make_clip(dto);
   }
 }

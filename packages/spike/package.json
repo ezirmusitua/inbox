@@ -1,0 +1,14 @@
+{
+  "name": "@inbox/spike",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "test:ast": "npx ts-node lib/ast.ts"
+  },
+  "devDependencies": {
+    "ts-node": "^10.5.0",
+    "typescript": "^4.5.2"
+  }
+}

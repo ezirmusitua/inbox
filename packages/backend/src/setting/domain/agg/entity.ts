@@ -9,48 +9,24 @@ export class SettingEntity {
     return path.join(this._data.device.document_dir, `.${this._data.app.name}`);
   }
 
+  get logseq_page_dir() {
+    return path.join(this._data.logseq.root, "pages");
+  }
+
   get setting_path() {
     return path.join(this.setting_dir, `settings.json`);
   }
 
-  get logseq_dir_path() {
-    return this._data.logseq.root;
-  }
-
   logseq_page_path(target: string) {
-    return path.join(this._data.logseq.root, "pages", target);
+    return path.join(this.logseq_page_dir, target);
   }
 
   logseq_asset_path(target: string) {
     return path.join(this._data.logseq.root, "assets", target);
   }
 
-  get logseq_page_dir_path() {
-    return path.join(this._data.logseq.root, "pages");
-  }
-
-  get logseq_asset_dir_path() {
-    return path.join(this._data.logseq.root, "assets");
-  }
-
-  get logseq_journal_dir_path() {
-    return path.join(this._data.logseq.root, "journals");
-  }
-
-  get today_article_path() {
-    const now = new Date();
-    return this.concat_day_path(now);
-  }
-
-  get article_summary_path() {
-    return path.join(this.logseq_page_dir_path, "汇总信息列表.md");
-  }
-
-  get all_article_path() {
-    return fs
-      .readdirSync(this.logseq_page_dir_path)
-      .filter((f) => f.endsWith("信息列表.md"))
-      .map((f) => path.join(this.logseq_page_dir_path, f));
+  logseq_journal_path(target: string) {
+    return path.join(this._data.logseq.root, "journals", target);
   }
 
   get browser_path() {
@@ -91,18 +67,6 @@ export class SettingEntity {
     return fs.writeFileSync(
       backend_config_path,
       JSON.stringify(this._data.backend, null, 2),
-    );
-  }
-
-  private concat_day_path(dt: Date) {
-    const year_str = dt.getFullYear() + "";
-    const month = dt.getMonth() + 1;
-    const month_str = month < 10 ? "0" + month : month + "";
-    const day = dt.getDate();
-    const day_str = day < 10 ? "0" + day : day + "";
-    return path.join(
-      this.logseq_page_dir_path,
-      `${year_str}_${month_str}_${day_str}-信息列表.md`,
     );
   }
 

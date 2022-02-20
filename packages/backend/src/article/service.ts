@@ -4,11 +4,13 @@ import {
   OnApplicationShutdown,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { PageEntity } from "page/domain/agg/entity";
 import { PageService } from "page/service";
 import { sArticle } from "schema/article";
 import { sArticleClip } from "schema/clip";
 import { SettingService } from "setting/service";
 import { Repository } from "typeorm";
+import { ArticleEntity } from "./domain/agg/entity";
 import { Printer } from "./domain/agg/pdf";
 import { ArticleAggRepo } from "./domain/agg/repo";
 import { MakeSnippetDto, SaveArticleDto } from "./dto";
@@ -31,8 +33,10 @@ export class ArticleService
   ) {}
 
   async onApplicationBootstrap() {
-    const browser_path = this.setting.get_setting().browser_path;
+    const setting = this.setting.get_setting();
+    const browser_path = setting.browser_path;
     await new Printer(browser_path).initialize();
+    const pages = await this.page.sync_local_pages();
   }
 
   async onApplicationShutdown() {
@@ -56,12 +60,30 @@ export class ArticleService
     return { status: 1 };
   }
 
-  async make_snippet(dto: MakeSnippetDto) {
+  async make_clip(dto: MakeSnippetDto) {
     const setting = this.setting.get_setting();
     const entity = await this._article_agg_repo.ensure_entity(
       { url: dto.url, title: dto.title },
       setting,
     );
     await entity.make_clip(dto.selection);
+  }
+
+  private async sync_page_articles(pages: PageEntity[]) {
+    // TODO: sync clips
+    // TODO: implement logseq markdown file parser & builder
+    const setting = this.setting.get_setting();
+    const updated = [];
+    const clip_ids = [];
+    for (const page of pages) {
+      for (const article of page.articles.data) {
+        const entity = await this._article_agg_repo.ensure_entity(
+          article,
+          setting,
+        );
+        await entity.save("");
+        updated.push(entity);
+      }
+    }
   }
 }

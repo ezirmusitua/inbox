@@ -8,6 +8,10 @@ export class PageArticleList {
     return this._data.find(({ _id }) => id === _id);
   }
 
+  get data() {
+    return this._data;
+  }
+
   async add(article: iArticle) {
     this._data = [
       article,
