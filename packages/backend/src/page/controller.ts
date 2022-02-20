@@ -7,12 +7,12 @@ export class PageController {
 
   @Get("/today")
   get_today() {
-    return this._service.get_today_article();
+    return this._service.list_today_article();
   }
 
   @Get("/")
   list() {
-    return this._service.list_article();
+    return this._service.list_all_article();
   }
 
   @Put("/summary")

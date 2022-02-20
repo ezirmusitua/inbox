@@ -27,7 +27,8 @@ export class PageService {
   private _summary = new SummaryService(this.setting);
 
   list_today_article() {
-    const entity = this.get_today_entity();
+    // const
+    const entity = [];
     return { data: entity.data, status: 1 };
   }
 
@@ -52,15 +53,5 @@ export class PageService {
   sync_local_pages() {
     const setting = this.setting.get_setting();
     return PageEntity.sync_local_pages(setting, this._page_agg_repo);
-  }
-
-  // TODO: use agg repo
-  private get_today_entity() {
-    const setting = this.setting.get_setting();
-    return PageEntity.read_from_file(
-      setting.today_article_path,
-      setting.logseq_asset_dir_path,
-      setting.logseq_journal_dir_path,
-    );
   }
 }

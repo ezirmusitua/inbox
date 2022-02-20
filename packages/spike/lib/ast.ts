@@ -1,21 +1,17 @@
 import * as fs from "fs";
 import * as path from "path";
 
-const input = `- [[Sample Page]]
-- ::url: https://baidu.com
-::saved_at: 2022-02-18 23:59
-::keywords: sample
-- SOURCE: ![Sample Page.pdf](../assets/Sample Page.pdf)
-- CLIPS
-	- > 这是一篇充满愤怒的博客。作者是一位出生于 70 年代的“技术愤青”unixsheikh，他用“激进”的方式抛出了一个观点：“Web 开发人员应该花费更多时间来进行优化”。\n很显然，把问题归咎于 Web 开发有些偏颇，但他的观点也的确喊出了一些人的心声。文章发出后，有支持者给他发邮件说：“关于文中的问题，我也一直在跟自己的老师和伙伴们争辩。我用过一个项目工具，里面包含 1786 个包、存在 69 项漏洞——45 个中风险、20 个高风险、4 个严重风险。其‘重达’432 MB，而且内部如同一团乱麻。更可笑的是，用它甚至不足以输出‘hello world’，因为还另外需要单独的路由包和状态管理包。这一切太疯狂了，但每个人都在这条路上狂奔，还美其名曰‘现代方法’。”
-		- Sample Note 1
-		- Sample Note 2`;
+// const input = `- [[Sample Page]]
+// - ::url: https://baidu.com
+// ::saved_at: 2022-02-18 23:59
+// ::keywords: sample
+// - SOURCE: ![Sample Page.pdf](../assets/Sample Page.pdf)
+// - CLIPS
+// 	- > 这是一篇充满愤怒的博客。作者是一位出生于 70 年代的“技术愤青”unixsheikh，他用“激进”的方式抛出了一个观点：“Web 开发人员应该花费更多时间来进行优化”。\n很显然，把问题归咎于 Web 开发有些偏颇，但他的观点也的确喊出了一些人的心声。文章发出后，有支持者给他发邮件说：“关于文中的问题，我也一直在跟自己的老师和伙伴们争辩。我用过一个项目工具，里面包含 1786 个包、存在 69 项漏洞——45 个中风险、20 个高风险、4 个严重风险。其‘重达’432 MB，而且内部如同一团乱麻。更可笑的是，用它甚至不足以输出‘hello world’，因为还另外需要单独的路由包和状态管理包。这一切太疯狂了，但每个人都在这条路上狂奔，还美其名曰‘现代方法’。”
+// 		- Sample Note 1
+// 		- Sample Note 2`;
 
-// const input = fs.readFileSync(path.join("data", "input.md")).toString();
-
-// const expected = JSON.parse(
-//     fs.readFileSync(path.join("data", "expected.json")).toString(),
-// );
+const input = fs.readFileSync(path.join("data", "input.md")).toString();
 
 const KEYWORDS = [
     "\t*- ", // start of line
@@ -48,6 +44,7 @@ class iASTreeNode {
 class ASTree {
     static parse(source: string): iASTreeNode[] {
         const tokens = ASTree.scan(source);
+        console.log(tokens);
         const forest = [];
         let prev = null;
         let current = null;
@@ -158,85 +155,63 @@ class ASTree {
     }
 
     static stringify(root: iASTreeNode) {
-        let out = "";
-        function _stringify(node: iASTreeNode, _out = "", level = 0) {
-            // console.log("_stringify out: ", _out);
-            // console.log("stringify node: ", node);
+        function _stringify(node: iASTreeNode, level = 0) {
+            console.log("level");
+            let _out = "";
             if (node.type === TokenType.ROOT) {
                 for (const child of node.children) {
-                    _out += _stringify(child as iASTreeNode, "", 0);
+                    _out += _stringify(child as iASTreeNode, 0);
                 }
-            } else if (node.type === TokenType.TEXT) {
-                // _out += node.children[0];
-                return _out + node.children[0];
-            } else if (node.type === TokenType.LINE) {
-                _out += `\n${"\t".repeat(level)}- `;
-                for (const child of node.children) {
-                    _out += _stringify(child as iASTreeNode, "", level + 1);
-                }
-                return _out;
-            } else if (node.type === TokenType.BI_LINK) {
-                _out += "[[";
-                _out += _stringify(
-                    node.children[0] as iASTreeNode,
-                    "",
-                    level + 1,
-                );
-                _out += "]]";
-                return _out;
-            } else if (node.type === TokenType.LINK) {
-                _out += "[";
-                _out += _stringify(
-                    node.children[0] as iASTreeNode,
-                    "",
-                    level + 1,
-                );
-                _out += "]";
-                return _out;
-            } else if (node.type === TokenType.ASSET) {
-                _out += "![";
-                _out += _stringify(
-                    node.children[0] as iASTreeNode,
-                    "",
-                    level + 1,
-                );
-                _out += "]";
-                _out += "(";
-                _out += _stringify(
-                    node.children[1] as iASTreeNode,
-                    "",
-                    level + 1,
-                );
-                _out += ")";
-                return _out;
-            } else if (node.type === TokenType.TAG) {
-                _out += "::";
-                _out += _stringify(
-                    node.children[0] as iASTreeNode,
-                    "",
-                    level + 1,
-                );
-                _out += ":";
-                _out += _stringify(
-                    node.children[1] as iASTreeNode,
-                    "",
-                    level + 1,
-                );
-                _out += "\n";
-                return _out;
-            } else if (node.type === TokenType.QUOTE) {
-                _out += "> ";
-                _out += _stringify(
-                    node.children[0] as iASTreeNode,
-                    "",
-                    level + 1,
-                );
                 return _out;
             }
-            return _out;
+            if (node.type === TokenType.TEXT) {
+                return _out + node.children[0];
+            }
+            if (node.type === TokenType.LINE) {
+                console.log("level: ", level);
+                _out += `\n${"\t".repeat(level)}- `;
+                for (const child of node.children) {
+                    _out += _stringify(child as iASTreeNode, level + 1);
+                }
+                return _out;
+            }
+            if (node.type === TokenType.BI_LINK) {
+                _out += "[[";
+                _out += _stringify(node.children[0] as iASTreeNode);
+                _out += "]]";
+                return _out;
+            }
+            if (node.type === TokenType.LINK) {
+                _out += "[";
+                _out += _stringify(node.children[0] as iASTreeNode);
+                _out += "]";
+                return _out;
+            }
+            if (node.type === TokenType.ASSET) {
+                _out += "![";
+                _out += _stringify(node.children[0] as iASTreeNode);
+                _out += "]";
+                _out += "(";
+                _out += _stringify(node.children[1] as iASTreeNode);
+                _out += ")";
+                return _out;
+            }
+            if (node.type === TokenType.TAG) {
+                _out += "::";
+                _out += _stringify(node.children[0] as iASTreeNode);
+                _out += ":";
+                _out += _stringify(node.children[1] as iASTreeNode);
+                _out += "\n";
+                return _out;
+            }
+            if (node.type === TokenType.QUOTE) {
+                _out += "> ";
+                _out += _stringify(node.children[0] as iASTreeNode);
+                return _out;
+            }
         }
 
-        return _stringify(root, out);
+        return _stringify(root);
     }
 
     static scan(chars: string) {
@@ -417,7 +392,6 @@ class ASTree {
 
 function test() {
     const parsed = ASTree.parse(input);
-    // console.log(parsed);
     console.log(ASTree.stringify(parsed[0]));
 }
 

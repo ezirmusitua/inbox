@@ -9,7 +9,7 @@ export class sArticleClip extends sBase implements iArticleClip {
   content: string;
 
   @Column()
-  note?: string;
+  note?: string[];
 
   @ManyToOne(() => sArticle, (article) => article.clips)
   @JoinColumn({ name: "article_id" })

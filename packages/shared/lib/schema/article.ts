@@ -8,7 +8,7 @@ export type tArticleClipId = number;
 export interface iArticleClip extends iBase {
     _id?: tArticleClipId;
     content: string;
-    note?: string;
+    note?: string[];
     article?: iArticle;
 }
 

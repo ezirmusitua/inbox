@@ -1,14 +1,14 @@
-import { iArticle, iSetting, iStructuredContent } from "@inbox/shared";
+import { iArticle } from "@inbox/shared";
 import * as fs from "fs";
-import { DateTime } from "luxon";
-import * as path from "path";
 import { SettingEntity } from "setting/domain/agg/entity";
 import { clean_file_path } from "utils";
+import { ArticleAST } from "./ast";
 import { Clip } from "./clip";
 import { Pdf } from "./pdf";
 import { ArticleAggRepo } from "./repo";
 
 export class ArticleEntity {
+  private ast = new ArticleAST(this._data);
   constructor(
     private _data: iArticle,
     private _setting: SettingEntity,
@@ -41,10 +41,9 @@ export class ArticleEntity {
 
   async save(content: string) {
     // TODO: save article to db
-    // TODO: save article page to filesystem
     await this.save_pdf(content);
     return new Promise((resolve, reject) =>
-      fs.writeFile(this.filepath, "", (err) => {
+      fs.writeFile(this.filepath, this.ast.string, (err) => {
         if (err) return reject(err);
         return resolve(true);
       }),
@@ -55,7 +54,7 @@ export class ArticleEntity {
     if (!content || this._data.pdf) return;
     const pdf = new Pdf(content);
     const buffer = await pdf.generate();
-    this._data.pdf = `SOURCE: ![${this.cleaned_name}.pdf](../assets/${this.pdf_name})`;
+    this._data.pdf = `../assets/${this.pdf_name}`;
     return new Promise((resolve, reject) =>
       fs.writeFile(this.pdf_path, buffer, (err) => {
         if (err) return reject(err);
@@ -89,19 +88,5 @@ export class ArticleEntity {
     const clip = await Clip.create(selection, this._data, this.repo);
     this._data.clips.push(clip.data);
     return this.save("");
-  }
-
-  static convert_to_article(structured: iStructuredContent) {
-    return structured.children.map(({ content, children }) => {
-      return {
-        title: content.slice(2),
-        _url_hash: children[0].content.slice(2),
-        _day_file: children[1].content.slice(2),
-        url: children[2].content.slice(2),
-        saved_at: new Date(children[3].content.slice(2)),
-        pdf: children[4]?.content?.slice(2),
-        notes: children[5]?.content?.slice(2).split("\n"),
-      };
-    });
   }
 }

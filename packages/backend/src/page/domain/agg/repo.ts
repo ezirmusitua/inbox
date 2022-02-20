@@ -6,6 +6,9 @@ import { In, Not, Repository } from "typeorm";
 import { parse_indent } from "utils";
 import { PageEntity } from "./entity";
 import { SettingEntity } from "setting/domain/agg/entity";
+import { NotFoundError } from "rxjs";
+import { NotFoundException } from "@nestjs/common";
+import { ASTree } from "utils/ast";
 
 export class PageAggRepo {
   constructor(
@@ -26,11 +29,15 @@ export class PageAggRepo {
   }
 
   // TODO: move to repo
-  async get_entity_from_file(path: string, setting: SettingEntity) {
-    const content: string = await new Promise((resolve, reject) =>
-      fs.readFile(path, (_, data) => resolve(data.toString())),
+  async get_entity_from_file(name: string, setting: SettingEntity) {
+    const full_path = setting.logseq_page_path(name);
+    if (fs.existsSync(full_path)) {
+      throw new NotFoundException(`${name} not found`);
+    }
+    const content: string = await new Promise((resolve) =>
+      fs.readFile(full_path, (_, data) => resolve(data.toString())),
     );
-    const structured = parse_indent(content);
-    return new PageEntity(structured as any, setting, this);
+    const ast_node = ASTree.parse(content);
+    return PageEntity.from_ast(ast_node, setting);
   }
 }
