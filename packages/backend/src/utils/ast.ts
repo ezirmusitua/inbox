@@ -18,7 +18,6 @@ export interface iASTreeNode {
 export class ASTree {
   static parse(source: string): iASTreeNode[] {
     const tokens = ASTree.scan(source);
-    console.log(tokens);
     const forest = [];
     let prev = null;
     let current = null;
@@ -38,8 +37,6 @@ export class ASTree {
           i += 1;
         }
         i -= 1;
-        // console.log("indent should change current to children");
-        // console.log("next i and token: ", i, tokens[i]);
       }
       if (token === "LINE START") {
         const node = {
@@ -120,7 +117,7 @@ export class ASTree {
       if (token.startsWith("STRING ")) {
         current.children.push({
           type: eTokenType.TEXT,
-          children: [token.slice(7).trim()],
+          content: token.slice(7).trim(),
         });
       }
       i += 1;
@@ -139,7 +136,7 @@ export class ASTree {
         return _out;
       }
       if (node.type === eTokenType.TEXT) {
-        return _out + node.children[0];
+        return _out + node.content;
       }
       if (node.type === eTokenType.LINE) {
         console.log("level: ", level);

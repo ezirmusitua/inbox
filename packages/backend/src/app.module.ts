@@ -25,6 +25,7 @@ import { SettingModule } from "setting/module";
         location: config.get("db_location") as any,
         autoLoadEntities: true,
         entities: ["schema/*.js"],
+        synchronize: true,
       }),
     }),
     AuthModule,

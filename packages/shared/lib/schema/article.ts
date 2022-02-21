@@ -8,7 +8,7 @@ export type tArticleClipId = number;
 export interface iArticleClip extends iBase {
     _id?: tArticleClipId;
     content: string;
-    note?: string[];
+    note?: string;
     article?: iArticle;
 }
 
@@ -24,10 +24,4 @@ export interface iArticle extends iBase, iArticleBasic {
     pdf?: string;
     clips?: iArticleClip[];
     saved_at?: Date;
-}
-
-export interface iStructuredContent {
-    raw: string;
-    content: string;
-    children: iStructuredContent[];
 }

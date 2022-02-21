@@ -26,6 +26,10 @@ export class ArticleAggRepo {
     return new ArticleEntity(data, setting, this);
   }
 
+  list() {
+    return this._article_repo.find();
+  }
+
   save_article(data: iArticle) {
     return this._article_repo.save(data);
   }

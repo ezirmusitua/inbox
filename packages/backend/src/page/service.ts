@@ -7,7 +7,6 @@ import { SettingService } from "setting/service";
 import { Repository } from "typeorm";
 import { PageEntity } from "./domain/agg/entity";
 import { PageAggRepo } from "./domain/agg/repo";
-import { SummaryService } from "./domain/summary.service";
 
 @Injectable()
 export class PageService {
@@ -24,24 +23,6 @@ export class PageService {
     private readonly setting: SettingService,
   ) {}
 
-  private _summary = new SummaryService(this.setting);
-
-  list_today_article() {
-    // const
-    const entity = [];
-    return { data: entity.data, status: 1 };
-  }
-
-  list_all_article() {
-    const data = this._summary.list();
-    return { data, status: 1 };
-  }
-
-  refresh_summary() {
-    const data = this._summary.refresh_summary();
-    return { data, status: 1 };
-  }
-
   add_article(article: iArticle) {
     throw new NotImplementedException("");
   }
@@ -52,6 +33,13 @@ export class PageService {
 
   sync_local_pages() {
     const setting = this.setting.get_setting();
-    return PageEntity.sync_local_pages(setting, this._page_agg_repo);
+    return PageAggRepo.sync_local_pages(setting);
+  }
+
+  get_entity(title: string) {
+    return this._page_agg_repo.get_page_entity(
+      title,
+      this.setting.get_setting(),
+    );
   }
 }

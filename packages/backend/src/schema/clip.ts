@@ -8,10 +8,10 @@ export class sArticleClip extends sBase implements iArticleClip {
   @Column()
   content: string;
 
-  @Column()
-  note?: string[];
+  @Column({ default: "[]" })
+  note?: string;
 
   @ManyToOne(() => sArticle, (article) => article.clips)
   @JoinColumn({ name: "article_id" })
-  article: sArticle;
+  article?: sArticle;
 }

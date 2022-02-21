@@ -85,7 +85,7 @@ export class ArticleAST {
                 },
               ],
             },
-            ...note.map((text) => ({
+            ...JSON.parse(note as any).map((text: string) => ({
               type: eTokenType.LINE,
               children: [
                 {
@@ -114,16 +114,19 @@ export class ArticleAST {
 
   static get_data(content: string) {
     const article_node = ASTree.parse(content)[0] as iASTreeNode;
+    const tags = article_node.children[0].children.reduce(
+      (res, { children }) => {
+        res[children[0].content] = children[1].content;
+        return res;
+      },
+      {},
+    );
     return {
-      title: article_node.children[0].children[0].content,
-      url: article_node.children[0].children[1].content,
-      saved_at: DateTime.fromFormat(
-        article_node.children[0].children[2].content,
-        "yyyy-mm-dd HH:MM",
-      ),
+      ...tags,
+      saved_at: new Date(tags["saved_at"]),
       pdf: article_node.children[1].children[1].children[1].content,
       clips: article_node.children[2].children.slice(1).map((quote) => ({
-        content: quote.children[0].content,
+        content: quote.children[0].children[0].content,
         note: quote.children.slice(1).map((line) => line.children[0].content),
       })),
     };

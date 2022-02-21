@@ -89,35 +89,4 @@ export class PageEntity {
       );
     }
   }
-
-  /**
-   * sync_pages
-   * @description read file from file system and sync changes to database
-   * @param setting setting entity
-   * @param repo page aggregation repository
-   */
-  static async sync_local_pages(setting: SettingEntity, repo: PageAggRepo) {
-    const pages: Array<{ name: string; path: string }> = await new Promise(
-      (resolve, reject) =>
-        fs.readdir(setting.logseq_page_dir, (err, files) => {
-          if (err) return reject(err);
-          return resolve(
-            files
-              .filter((file) => file.endsWith("-信息列表"))
-              .map((name) => ({
-                name,
-                path: setting.logseq_page_path(name),
-              })),
-          );
-        }),
-    );
-    const updated = [];
-    for (const page of pages) {
-      const entity = await repo.get_entity_from_file(page.path, setting);
-      const saved = await entity.save();
-      updated.push(saved);
-    }
-    await repo.remove_pages(updated.map((e) => e.data._id));
-    return updated;
-  }
 }

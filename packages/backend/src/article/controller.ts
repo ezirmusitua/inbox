@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   ParseIntPipe,
   Post,
@@ -13,18 +14,33 @@ import { ArticleService } from "./service";
 export class ArticleController {
   constructor(private readonly service: ArticleService) {}
 
+  @Get("/")
+  list() {
+    return this.service.list();
+  }
+
+  @Get("/today")
+  get_today() {
+    return this.service.list_today();
+  }
+
   @Post("")
   save_article(@Body() article: SaveArticleDto) {
-    return this.service.save_article(article);
+    return this.service.save(article);
   }
 
   @Delete("/:id")
   remove(@Param("id", ParseIntPipe) id: number) {
-    return this.service.remove_article(id);
+    return this.service.remove(id);
   }
 
   @Post("/clip")
   make_clip(@Body() dto: MakeSnippetDto) {
     return this.service.make_clip(dto);
+  }
+
+  @Post("/database")
+  refresh_database() {
+    return this.service.rebuild_database();
   }
 }

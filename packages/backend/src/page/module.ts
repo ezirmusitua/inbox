@@ -1,12 +1,14 @@
 import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { sArticle } from "schema/article";
+import { sPage } from "schema/page";
 import { SettingModule } from "setting/module";
-import { PageController } from "./controller";
 import { PageService } from "./service";
 
 @Module({
-  imports: [SettingModule],
+  imports: [SettingModule, TypeOrmModule.forFeature([sPage, sArticle])],
   providers: [PageService],
   exports: [PageService],
-  controllers: [PageController],
+  controllers: [],
 })
 export class PageModule {}

@@ -9,8 +9,9 @@ export class PageAST {
     const articles = [];
     for (const line of ast_node[0].children) {
       const bi_link = line.children[0] as iASTreeNode;
-      const article_title = bi_link.children[0].content;
-      const article_path = setting.logseq_page_path(article_title);
+      const article_title = bi_link.content;
+      const article_path = setting.logseq_page_path(`${article_title}.md`);
+      // console.log("article path: ", article_path, fs.existsSync(article_path));
       if (fs.existsSync(article_path)) {
         const file_content = (await new Promise((resolve) =>
           fs.readFile(article_path, (_, data) => resolve(data.toString())),
@@ -19,5 +20,6 @@ export class PageAST {
         articles.push(article);
       }
     }
+    return articles;
   }
 }

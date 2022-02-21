@@ -25,7 +25,7 @@ const KEYWORDS = [
     ")", // end of asset src
 ];
 
-enum TokenType {
+export enum eTokenType {
     ROOT = "root",
     LINE = "line",
     BI_LINK = "bi-link",
@@ -36,12 +36,12 @@ enum TokenType {
     TEXT = "text",
 }
 
-class iASTreeNode {
-    type: TokenType;
+export interface iASTreeNode {
+    type: eTokenType;
     children: string[] | iASTreeNode[];
 }
 
-class ASTree {
+export class ASTree {
     static parse(source: string): iASTreeNode[] {
         const tokens = ASTree.scan(source);
         console.log(tokens);
@@ -53,7 +53,7 @@ class ASTree {
             let token = tokens[i];
             if (token === "START") {
                 current = {
-                    type: TokenType.ROOT,
+                    type: eTokenType.ROOT,
                     children: [],
                 };
                 forest.push(current);
@@ -69,7 +69,7 @@ class ASTree {
             }
             if (token === "LINE START") {
                 const node = {
-                    type: TokenType.LINE,
+                    type: eTokenType.LINE,
                     children: [],
                 };
                 current.children.push(node);
@@ -78,7 +78,7 @@ class ASTree {
             }
             if (token === "BI_LINK [[") {
                 const node = {
-                    type: TokenType.BI_LINK,
+                    type: eTokenType.BI_LINK,
                     children: [],
                 };
                 current.children.push(node);
@@ -90,7 +90,7 @@ class ASTree {
             }
             if (token === "ASSET ![") {
                 const node = {
-                    type: TokenType.ASSET,
+                    type: eTokenType.ASSET,
                     children: [],
                 };
                 current.children.push(node);
@@ -103,7 +103,7 @@ class ASTree {
 
             if (token === "LINK [") {
                 const node = {
-                    type: TokenType.LINK,
+                    type: eTokenType.LINK,
                     children: [],
                 };
                 current.children.push(node);
@@ -116,7 +116,7 @@ class ASTree {
 
             if (token === "TAG FIELD ::") {
                 const node = {
-                    type: TokenType.TAG,
+                    type: eTokenType.TAG,
                     children: [],
                 };
                 current.children.push(node);
@@ -128,7 +128,7 @@ class ASTree {
 
             if (token === "QUOTE START") {
                 const node = {
-                    type: TokenType.QUOTE,
+                    type: eTokenType.QUOTE,
                     children: [],
                 };
                 current.children.push(node);
@@ -145,7 +145,7 @@ class ASTree {
 
             if (token.startsWith("STRING ")) {
                 current.children.push({
-                    type: TokenType.TEXT,
+                    type: eTokenType.TEXT,
                     children: [token.slice(7).trim()],
                 });
             }
@@ -158,16 +158,16 @@ class ASTree {
         function _stringify(node: iASTreeNode, level = 0) {
             console.log("level");
             let _out = "";
-            if (node.type === TokenType.ROOT) {
+            if (node.type === eTokenType.ROOT) {
                 for (const child of node.children) {
                     _out += _stringify(child as iASTreeNode, 0);
                 }
                 return _out;
             }
-            if (node.type === TokenType.TEXT) {
+            if (node.type === eTokenType.TEXT) {
                 return _out + node.children[0];
             }
-            if (node.type === TokenType.LINE) {
+            if (node.type === eTokenType.LINE) {
                 console.log("level: ", level);
                 _out += `\n${"\t".repeat(level)}- `;
                 for (const child of node.children) {
@@ -175,19 +175,19 @@ class ASTree {
                 }
                 return _out;
             }
-            if (node.type === TokenType.BI_LINK) {
+            if (node.type === eTokenType.BI_LINK) {
                 _out += "[[";
                 _out += _stringify(node.children[0] as iASTreeNode);
                 _out += "]]";
                 return _out;
             }
-            if (node.type === TokenType.LINK) {
+            if (node.type === eTokenType.LINK) {
                 _out += "[";
                 _out += _stringify(node.children[0] as iASTreeNode);
                 _out += "]";
                 return _out;
             }
-            if (node.type === TokenType.ASSET) {
+            if (node.type === eTokenType.ASSET) {
                 _out += "![";
                 _out += _stringify(node.children[0] as iASTreeNode);
                 _out += "]";
@@ -196,7 +196,7 @@ class ASTree {
                 _out += ")";
                 return _out;
             }
-            if (node.type === TokenType.TAG) {
+            if (node.type === eTokenType.TAG) {
                 _out += "::";
                 _out += _stringify(node.children[0] as iASTreeNode);
                 _out += ":";
@@ -204,7 +204,7 @@ class ASTree {
                 _out += "\n";
                 return _out;
             }
-            if (node.type === TokenType.QUOTE) {
+            if (node.type === eTokenType.QUOTE) {
                 _out += "> ";
                 _out += _stringify(node.children[0] as iASTreeNode);
                 return _out;

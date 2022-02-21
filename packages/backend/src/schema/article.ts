@@ -1,4 +1,4 @@
-import { iArticle } from "@inbox/shared";
+import { iArticle, iArticleClip } from "@inbox/shared";
 import {
   Column,
   Entity,
@@ -42,5 +42,5 @@ export class sArticle extends sBase implements iArticle {
   page: sPage;
 
   @OneToMany(() => sArticleClip, (clip) => clip.article)
-  clips: [];
+  clips: iArticleClip[];
 }
