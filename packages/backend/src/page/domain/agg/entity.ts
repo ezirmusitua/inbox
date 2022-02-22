@@ -2,20 +2,17 @@ import { iArticle, iPage } from "@inbox/shared";
 import * as fs from "fs";
 import { DateTime } from "luxon";
 import { SettingEntity } from "setting/domain/agg/entity";
-import { join_indent } from "utils";
-import { iASTreeNode } from "utils/ast";
 import { PageArticleList } from "./article_list";
+import { PageAST } from "./ast";
 import { PageAggRepo } from "./repo";
 
 export class PageEntity {
-  public readonly articles = new PageArticleList(
-    this._data.articles,
-    this.repo,
-  );
+  public readonly articles = new PageArticleList(this._data, this.repo);
+  private readonly ast = new PageAST(this._data);
 
   constructor(
     private _data: iPage,
-    private _setting: SettingEntity,
+    private readonly _setting: SettingEntity,
     private readonly repo: PageAggRepo,
   ) {}
 
@@ -24,7 +21,7 @@ export class PageEntity {
   }
 
   get date_label() {
-    return DateTime.fromJSDate(this._data._created_at).toFormat("yyyy_MM_dd");
+    return PageEntity.get_date_label(this._data._created_at);
   }
 
   get link_name() {
@@ -36,7 +33,8 @@ export class PageEntity {
   }
 
   async add_article(item: iArticle) {
-    this.articles.add(item);
+    await this.articles.add(item);
+    this._data.articles = this.articles.data;
     await this.save();
   }
 
@@ -46,31 +44,18 @@ export class PageEntity {
   }
 
   private async save() {
-    // TODO: use fs with Promise
-    // TODO: save to database
-    // TODO: save to filesystem
-    fs.writeFileSync(
-      this.filepath,
-      join_indent(
-        this._data.articles.map((article) => ({
-          content: article.title,
-          children: [
-            article.url_hash,
-            article.page,
-            article.url,
-            article.saved_at,
-            article.pdf,
-            (article.clips || []).join("\n"),
-          ],
-        })),
-      ),
-    );
     await this.append_to_journal();
-    this._data = await this.repo.save_page(this._data);
-    return this;
+    await new Promise((resolve, reject) =>
+      fs.writeFile(this.filepath, this.ast.string, (err) => {
+        if (err) return reject(err);
+        return resolve(true);
+      }),
+    );
+    return this.repo.save_page(this._data);
   }
 
   private async append_to_journal() {
+    if (this._data.appended_to_journal) return;
     const journal_path = this._setting.logseq_journal_path(
       `${this.date_label}.md`,
     );
@@ -80,13 +65,21 @@ export class PageEntity {
         fs.readFile(journal_path, (_, data) => resolve(data.toString())),
       );
     }
-    // TODO: maybe make a copy at first?
     if (!journal_content.includes(this.date_label)) {
       journal_content += "\n- INBOX";
-      journal_content += `\n	- [[${this.link_name}}]]`;
+      journal_content += `\n\t- [[${this.link_name}}]]`;
       return new Promise((resolve) =>
         fs.writeFile(journal_path, journal_content, (_) => resolve(true)),
       );
     }
+    this._data.appended_to_journal = true;
+  }
+
+  static get_date_label(date: Date) {
+    return DateTime.fromJSDate(date).toFormat("yyyy_MM_dd");
+  }
+
+  static get_date_title(date: Date) {
+    return `${PageEntity.get_date_label(date)}-信息列表`;
   }
 }

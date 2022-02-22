@@ -14,7 +14,7 @@ export class ArticleAST {
         {
           field: "saved_at",
           value: DateTime.fromJSDate(this._data.saved_at).toFormat(
-            "yyyy-mm-dd HH:MM",
+            "yyyy-MM-dd HH:mm",
           ),
         },
       ].map(({ field, value }) => ({
@@ -28,7 +28,7 @@ export class ArticleAST {
           {
             type: eTokenType.TEXT,
             children: [],
-            content: field,
+            content: value,
           },
         ],
       })),
@@ -72,7 +72,7 @@ export class ArticleAST {
           children: [],
           content: "CLIPS",
         },
-        ...this._data.clips.map(({ content, note }) => ({
+        ...(this._data.clips || []).map(({ content, note }) => ({
           type: eTokenType.LINE,
           children: [
             {
@@ -116,6 +116,7 @@ export class ArticleAST {
     const article_node = ASTree.parse(content)[0] as iASTreeNode;
     const tags = article_node.children[0].children.reduce(
       (res, { children }) => {
+        console.log(res);
         res[children[0].content] = children[1].content;
         return res;
       },

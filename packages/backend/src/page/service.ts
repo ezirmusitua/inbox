@@ -1,6 +1,7 @@
 import { iArticle } from "@inbox/shared";
 import { Injectable, NotImplementedException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { DateTime } from "luxon";
 import { sArticle } from "schema/article";
 import { sPage } from "schema/page";
 import { SettingService } from "setting/service";
@@ -23,23 +24,46 @@ export class PageService {
     private readonly setting: SettingService,
   ) {}
 
-  add_article(article: iArticle) {
-    throw new NotImplementedException("");
+  async add_article(article: iArticle) {
+    const entity = await this._page_agg_repo.ensure_entity(
+      PageEntity.get_date_label(article.saved_at),
+      this.setting.get_setting(),
+    );
+    return entity.add_article(article);
   }
 
   remove_article(article: iArticle) {
     throw new NotImplementedException("");
   }
 
-  sync_local_pages() {
+  async sync_local_pages() {
     const setting = this.setting.get_setting();
-    return PageAggRepo.sync_local_pages(setting);
+    const pages_data = await PageAggRepo.sync_local_pages(setting);
+    const saved_pages = [];
+    for (const page of pages_data) {
+      const saved_page = await this._page_agg_repo.save_page({
+        title: page.title,
+      });
+      saved_pages.push({
+        ...page,
+        ...saved_page,
+      });
+    }
+    return saved_pages;
+  }
+
+  drop_page_database() {
+    return this._page_agg_repo.drop_page_database();
+  }
+
+  get_today() {
+    return this._page_agg_repo.ensure_entity(
+      PageEntity.get_date_title(new Date()),
+      this.setting.get_setting(),
+    );
   }
 
   get_entity(title: string) {
-    return this._page_agg_repo.get_page_entity(
-      title,
-      this.setting.get_setting(),
-    );
+    return this._page_agg_repo.ensure_entity(title, this.setting.get_setting());
   }
 }

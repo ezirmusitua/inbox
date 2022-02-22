@@ -20,7 +20,7 @@ export class ArticleController {
   }
 
   @Get("/today")
-  get_today() {
+  list_today() {
     return this.service.list_today();
   }
 

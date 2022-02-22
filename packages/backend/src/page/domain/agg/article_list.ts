@@ -1,8 +1,12 @@
-import { iArticle } from "@inbox/shared";
+import { iArticle, iPage } from "@inbox/shared";
 import { PageAggRepo } from "./repo";
 
 export class PageArticleList {
-  constructor(private _data: iArticle[], private readonly repo: PageAggRepo) {}
+  private _data = this.page.articles;
+  constructor(
+    private readonly page: iPage,
+    private readonly repo: PageAggRepo,
+  ) {}
 
   get(id: number) {
     return this._data.find(({ _id }) => id === _id);
@@ -13,8 +17,13 @@ export class PageArticleList {
   }
 
   async add(article: iArticle) {
+    const updated = await this.repo.save_article({
+      ...article,
+      page: this.page,
+      page_id: this.page._id,
+    });
     this._data = [
-      article,
+      updated,
       ...this._data.filter(({ _id }) => _id !== article._id),
     ];
     return this;

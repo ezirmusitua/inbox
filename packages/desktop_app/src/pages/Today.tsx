@@ -7,10 +7,10 @@ import { eActionType, init_state, reducer, TodayContext } from "./Today.store";
 
 export default function TodayPage() {
     const [state, dispatch] = useReducer(reducer, init_state);
-    const home_action = new TodayAction({ state, dispatch });
+    const action = new TodayAction({ state, dispatch });
     const title = DateTime.now().toFormat("dd, MMMM yyyy");
     useEffect(() => {
-        home_action.init();
+        action.init();
     }, []);
     return (
         <Layout>
@@ -19,12 +19,6 @@ export default function TodayPage() {
                     title={title}
                     items={state.items}
                     on_remove={(item) => {
-                        console.log(
-                            item,
-                            state.items.filter(
-                                ({ _url_hash }) => _url_hash !== item._url_hash,
-                            ),
-                        );
                         return dispatch({
                             type: eActionType.CHANGE_ITEMS,
                             payload: state.items.filter(

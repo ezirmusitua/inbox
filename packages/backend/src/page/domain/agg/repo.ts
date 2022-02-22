@@ -1,7 +1,6 @@
 import { iArticle, iPage } from "@inbox/shared";
 import { NotFoundException } from "@nestjs/common";
 import * as fs from "fs";
-import { cwd } from "process";
 import { SettingEntity } from "setting/domain/agg/entity";
 import { In, Not, Repository } from "typeorm";
 import { PageAST } from "./ast";
@@ -14,25 +13,28 @@ export class PageAggRepo {
   ) {}
 
   save_article(article: iArticle) {
+    console.log("save article: ", article);
     return this._article_repo.save(article);
   }
 
   save_page(page: iPage) {
+    console.log("save page: ", page);
     return this._page_repo.save(page);
   }
 
-  remove_pages(page_ids: number[]) {
-    return this._page_repo.delete({ _id: Not(In(page_ids)) });
+  drop_page_database() {
+    return this._page_repo.delete({});
   }
 
-  async get_page_entity(title: string, setting: SettingEntity) {
-    let data = await this._page_repo.findOne({ title });
-    if (data) {
-      data = {
-        _id: null,
-        title: title,
-        articles: [],
-      };
+  async ensure_entity(title: string, setting: SettingEntity) {
+    let data = await this._page_repo.findOne({
+      where: { title },
+      relations: ["articles"],
+    });
+    console.log("page data: ", data);
+    if (!data) {
+      data = await this._page_repo.save({ title });
+      data.articles = [];
     }
     return new PageEntity(data, setting, this);
   }
@@ -63,27 +65,18 @@ export class PageAggRepo {
     return pages;
   }
 
-  static async parse_articles_from_file(
-    full_path: string,
-    setting: SettingEntity,
-  ) {
-    if (!fs.existsSync(full_path)) {
-      throw new NotFoundException(`${full_path} not found`);
-    }
-    const content: string = await new Promise((resolve) =>
-      fs.readFile(full_path, (_, data) => resolve(data.toString())),
-    );
-    return PageAST.get_data(content, setting);
-  }
-
   static async get_page_data_from_file(
     page_name: string,
     setting: SettingEntity,
   ) {
-    const articles = await PageAggRepo.parse_articles_from_file(
-      setting.logseq_page_path(page_name),
-      setting,
+    const full_path = setting.logseq_page_path(page_name);
+    if (!fs.existsSync(full_path)) {
+      throw new NotFoundException(`${full_path} not found`);
+    }
+    const content: string = await new Promise((resolve) =>
+      fs.readFile(full_path, (_, data) => resolve(data.toString().trim())),
     );
+    const articles = await PageAST.get_data(content, setting);
     return {
       _id: null,
       title: page_name.replace(".md", ""),

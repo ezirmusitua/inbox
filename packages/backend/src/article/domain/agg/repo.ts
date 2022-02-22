@@ -11,18 +11,27 @@ export class ArticleAggRepo {
   ) {}
 
   async ensure_entity(payload: iArticle, setting: SettingEntity) {
-    const data: iArticle = await this._article_repo.findOne({
-      where: [{ _id: payload._id }, { _url_hash: hash(payload.url) }],
+    const _url_hash = hash(payload.url);
+    let data: iArticle = await this._article_repo.findOne({
+      where: [{ _id: payload._id }, { _url_hash }],
+      relations: ["clips"],
     });
-    return new ArticleEntity(
-      data || { ...payload, saved_at: new Date() },
-      setting,
-      this,
-    );
+    if (!data) {
+      data = await this._article_repo.save({
+        ...payload,
+        _url_hash,
+        saved_at: new Date(),
+      });
+      data.clips = [];
+    }
+    return new ArticleEntity(data, setting, this);
   }
 
   async get_entity(id: number, setting: SettingEntity) {
-    const data = await this._article_repo.findOne(id);
+    const data = await this._article_repo.findOne({
+      where: { _id: id },
+      relations: ["clips"],
+    });
     return new ArticleEntity(data, setting, this);
   }
 
@@ -30,7 +39,8 @@ export class ArticleAggRepo {
     return this._article_repo.find();
   }
 
-  save_article(data: iArticle) {
+  async save_article(data: iArticle) {
+    await this._clip_repo.save(data.clips);
     return this._article_repo.save(data);
   }
 
@@ -38,11 +48,13 @@ export class ArticleAggRepo {
     return this._clip_repo.save(data);
   }
 
-  remove_articles(article_ids: number[]) {
-    return this._article_repo.delete({ _id: Not(In(article_ids)) });
+  async remove_articles(article_ids: number[]) {
+    await this._clip_repo.delete({ article_id: In(article_ids) });
+    return this._article_repo.delete({ _id: In(article_ids) });
   }
 
-  remove_article_clips(clip_ids: number[]) {
-    return this._clip_repo.delete({ _id: Not(In(clip_ids)) });
+  async drop_article_database() {
+    await this._clip_repo.delete({});
+    return this._article_repo.delete({});
   }
 }

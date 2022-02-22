@@ -5,8 +5,13 @@ export interface iState {
     initialized: boolean;
 }
 
+export enum eActionType {
+    CHANGE_SETTING,
+    CHANGE_INITIALIZED,
+}
+
 export interface iAction {
-    type: string;
+    type: eActionType;
     payload: any;
 }
 
@@ -17,12 +22,13 @@ export const init_state: iState = {
 
 export function reducer(state: iState, action: iAction) {
     switch (action.type) {
-        case "set_setting":
+        case eActionType.CHANGE_SETTING:
             return { ...state, setting: action.payload };
-        case "set_initialized":
+        case eActionType.CHANGE_INITIALIZED:
             return { ...state, initialized: action.payload };
+        default:
+            return { ...state };
     }
-    return { ...state };
 }
 
 export interface iAppContextValue {

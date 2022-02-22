@@ -2,7 +2,7 @@ import { InitSettingDto } from "@inbox/shared";
 import { dialog } from "@tauri-apps/api";
 import backend from "backend";
 import SettingService from "resource/setting";
-import { iAppContextValue } from "./App.store";
+import { eActionType, iAppContextValue } from "./App.store";
 
 export default class AppAction {
     constructor(private readonly ctx: iAppContextValue) {}
@@ -33,6 +33,6 @@ export default class AppAction {
 
     async init() {
         await this.init_app();
-        this.ctx.dispatch({ type: "set_initialized", payload: true });
+        this.ctx.dispatch({ type: eActionType.CHANGE_INITIALIZED, payload: true });
     }
 }

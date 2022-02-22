@@ -1,8 +1,8 @@
-import { del, get, put } from "./fetch";
+import { del, get } from "./fetch";
 
 export const article = {
-    refresh_summary() {
-        return put({ url: "api/article/summary", data: {} });
+    list() {
+        return get({ url: "api/article" });
     },
 
     get_today() {

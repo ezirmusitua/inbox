@@ -15,32 +15,30 @@ import { sPage } from "./page";
 export class sArticle extends sBase implements iArticle {
   @Index()
   @Column({ unique: true })
-  url_hash: string;
+  _url_hash: string;
 
   @Index()
-  @Column()
-  page_id: number;
-
-  @Column()
-  pdf: string;
-
-  @Column()
+  @Column({ unique: true })
   url: string;
 
   @Column()
   title: string;
 
-  @Column()
-  content?: string;
-
   @Index()
   @Column()
   saved_at: Date;
 
-  @ManyToOne(() => sPage, (page) => page.articles)
-  @JoinColumn({ name: "page_id" })
-  page: sPage;
+  @Index()
+  @Column({ nullable: true })
+  page_id?: number;
 
-  @OneToMany(() => sArticleClip, (clip) => clip.article)
-  clips: iArticleClip[];
+  @Column({ nullable: true })
+  pdf?: string;
+
+  @ManyToOne(() => sPage, (page) => page.articles, { nullable: true })
+  @JoinColumn({ name: "page_id" })
+  page?: sPage;
+
+  @OneToMany(() => sArticleClip, (clip) => clip.article, { nullable: true })
+  clips?: iArticleClip[];
 }

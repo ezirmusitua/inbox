@@ -9,6 +9,9 @@ export class sPage extends sBase implements iPage {
   @Column({ unique: true })
   title: string;
 
+  @Column({ default: false })
+  appended_to_journal?: boolean;
+
   @OneToMany(() => sArticle, (article) => article.page)
-  articles: sArticle[];
+  articles?: sArticle[];
 }

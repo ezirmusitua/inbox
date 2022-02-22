@@ -13,7 +13,6 @@ export class Printer {
 
   async initialize() {
     if (this._initialized) return;
-    // TODO: make executable path configurable
     this.browser = await puppeteer.launch({
       headless: true,
       executablePath: this.browser_bin,

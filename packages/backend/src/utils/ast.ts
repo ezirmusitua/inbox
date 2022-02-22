@@ -127,7 +127,6 @@ export class ASTree {
 
   static stringify(root: iASTreeNode) {
     function _stringify(node: iASTreeNode, level = 0) {
-      console.log("level");
       let _out = "";
       if (node.type === eTokenType.ROOT) {
         for (const child of node.children) {
@@ -139,7 +138,6 @@ export class ASTree {
         return _out + node.content;
       }
       if (node.type === eTokenType.LINE) {
-        console.log("level: ", level);
         _out += `\n${"\t".repeat(level)}- `;
         for (const child of node.children) {
           _out += _stringify(child as iASTreeNode, level + 1);

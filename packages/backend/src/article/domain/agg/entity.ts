@@ -40,8 +40,8 @@ export class ArticleEntity {
   }
 
   async save(content: string) {
-    // TODO: save article to db
     await this.save_pdf(content);
+    await this.repo.save_article(this._data);
     return new Promise((resolve, reject) =>
       fs.writeFile(this.filepath, this.ast.string, (err) => {
         if (err) return reject(err);

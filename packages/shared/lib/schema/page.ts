@@ -4,7 +4,8 @@ import { iBase } from "./base";
 export type tPageId = number;
 
 export interface iPage extends iBase {
-    _id: tPageId;
+    _id?: tPageId;
     title: string;
-    articles: iArticle[];
+    articles?: iArticle[];
+    appended_to_journal?: boolean;
 }

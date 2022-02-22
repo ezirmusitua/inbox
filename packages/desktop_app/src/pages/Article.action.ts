@@ -5,7 +5,7 @@ export default class ArticleAction {
     constructor(private readonly ctx: iArticleContextValue) {}
 
     async init() {
-        const resp = await article.refresh_summary();
+        const resp = await article.list();
         this.ctx.dispatch({
             type: eActionType.CHANGE_ITEMS,
             payload: resp.data.items,

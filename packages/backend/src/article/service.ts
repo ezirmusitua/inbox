@@ -8,7 +8,6 @@ import { DateTime } from "luxon";
 import { PageService } from "page/service";
 import { sArticle } from "schema/article";
 import { sArticleClip } from "schema/clip";
-import { sPage } from "schema/page";
 import { SettingService } from "setting/service";
 import { Repository } from "typeorm";
 import { hash } from "utils";
@@ -38,7 +37,7 @@ export class ArticleService
     const setting = this.setting.get_setting();
     const browser_path = setting.browser_path;
     await new Printer(browser_path).initialize();
-    this.rebuild_database();
+    await this.rebuild_database();
   }
 
   async onApplicationShutdown() {
@@ -52,9 +51,7 @@ export class ArticleService
   }
 
   async list_today() {
-    const entity = await this.page.get_entity(
-      new DateTime().toFormat("yyyy_MM_dd-信息列表"),
-    );
+    const entity = await this.page.get_today();
     return { data: entity.data, status: 1 };
   }
 
@@ -84,12 +81,10 @@ export class ArticleService
   }
 
   async rebuild_database() {
-    // TODO: drop old database
-    // TODO: sync clips
-    // TODO: implement logseq markdown file parser & builder
-    // TODO: return raw page data
+    await this.page.drop_page_database();
+    await this._article_agg_repo.drop_article_database();
     const pages = await this.page.sync_local_pages();
-    const setting = this.setting.get_setting();
+    const articles = [];
     for (const page of pages) {
       for (const article of page.articles) {
         const saved_clips = await this._clip_repo.save(
@@ -98,12 +93,12 @@ export class ArticleService
             note: (item.note as any).join("\n"),
           })),
         );
-        console.log(saved_clips);
+        article.page = page;
         article.clips = saved_clips;
-        article.url_hash = hash(article.url);
-        const saved_article = await this._article_repo.save(article);
-        await this.page.add_article(saved_article);
+        article._url_hash = hash(article.url);
+        articles.push(article);
       }
     }
+    await this._article_repo.save(articles);
   }
 }

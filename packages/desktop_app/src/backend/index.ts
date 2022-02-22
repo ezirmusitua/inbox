@@ -1,4 +1,4 @@
-import { iBackendConfig } from "@inbox/shared";
+import { iBackendSetting } from "@inbox/shared";
 import { fs, path } from "@tauri-apps/api";
 import { Command } from "@tauri-apps/api/shell";
 
@@ -59,12 +59,13 @@ export default {
                 jwt_expires: "30d",
                 browser_bin: "",
             },
+            service: {},
         };
     },
-    start_backend(backend_config: iBackendConfig) {
+    start_backend(setting: iBackendSetting) {
         if (is_dev) return;
-        const args = Object.keys(backend_config).map(
-            (key) => `--${key}=${backend_config[key]}`,
+        const args = Object.keys(setting).map(
+            (key) => `--${key}=${setting[key]}`,
         );
         return call_start_backend_command(args);
     },
