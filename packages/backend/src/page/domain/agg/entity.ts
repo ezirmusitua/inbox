@@ -1,7 +1,7 @@
 import { iArticle, iPage } from "@inbox/shared";
-import * as fs from "fs";
 import { DateTime } from "luxon";
 import { SettingEntity } from "setting/domain/agg/entity";
+import { read_file_silently, save_file } from "utils";
 import { PageArticleList } from "./article_list";
 import { PageAST } from "./ast";
 import { PageAggRepo } from "./repo";
@@ -40,17 +40,13 @@ export class PageEntity {
 
   async remove_article(item: iArticle) {
     this.articles.remove(item);
+    this._data.articles = this.articles.data;
     await this.save();
   }
 
   private async save() {
     await this.append_to_journal();
-    await new Promise((resolve, reject) =>
-      fs.writeFile(this.filepath, this.ast.string, (err) => {
-        if (err) return reject(err);
-        return resolve(true);
-      }),
-    );
+    await save_file(this.ast.string, this.filepath);
     return this.repo.save_page(this._data);
   }
 
@@ -59,18 +55,11 @@ export class PageEntity {
     const journal_path = this._setting.logseq_journal_path(
       `${this.date_label}.md`,
     );
-    let journal_content = "";
-    if (fs.existsSync(journal_path)) {
-      journal_content = await new Promise((resolve) =>
-        fs.readFile(journal_path, (_, data) => resolve(data.toString())),
-      );
-    }
+    let journal_content = await read_file_silently(journal_path);
     if (!journal_content.includes(this.date_label)) {
       journal_content += "\n- INBOX";
       journal_content += `\n\t- [[${this.link_name}}]]`;
-      return new Promise((resolve) =>
-        fs.writeFile(journal_path, journal_content, (_) => resolve(true)),
-      );
+      await save_file(journal_content, journal_path);
     }
     this._data.appended_to_journal = true;
   }

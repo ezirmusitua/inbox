@@ -1,7 +1,7 @@
 import { iArticle } from "@inbox/shared";
 import * as fs from "fs";
 import { SettingEntity } from "setting/domain/agg/entity";
-import { clean_file_path } from "utils";
+import { clean_file_path, remove_file_silently, save_file } from "utils";
 import { ArticleAST } from "./ast";
 import { Clip } from "./clip";
 import { Pdf } from "./pdf";
@@ -42,12 +42,19 @@ export class ArticleEntity {
   async save(content: string) {
     await this.save_pdf(content);
     await this.repo.save_article(this._data);
-    return new Promise((resolve, reject) =>
-      fs.writeFile(this.filepath, this.ast.string, (err) => {
+    return save_file(this.ast.string, this.filepath);
+  }
+
+  async remove() {
+    if (!fs.existsSync(this.filepath)) return;
+    await new Promise((resolve, reject) =>
+      fs.unlink(this.filepath, (err) => {
         if (err) return reject(err);
         return resolve(true);
       }),
     );
+    await this.remove_pdf();
+    await this.repo.remove_article(this._data);
   }
 
   async save_pdf(content: string) {
@@ -55,33 +62,11 @@ export class ArticleEntity {
     const pdf = new Pdf(content);
     const buffer = await pdf.generate();
     this._data.pdf = `../assets/${this.pdf_name}`;
-    return new Promise((resolve, reject) =>
-      fs.writeFile(this.pdf_path, buffer, (err) => {
-        if (err) return reject(err);
-        return resolve(true);
-      }),
-    );
-  }
-
-  async remove() {
-    await this.remove_pdf();
-    if (!fs.existsSync(this.filepath)) return;
-    return new Promise((resolve, reject) =>
-      fs.unlink(this.filepath, (err) => {
-        if (err) return reject(err);
-        return resolve(true);
-      }),
-    );
+    return save_file(buffer, this.pdf_path);
   }
 
   private remove_pdf() {
-    if (!fs.existsSync(this.pdf_path)) return;
-    return new Promise((resolve, reject) =>
-      fs.unlink(this.pdf_path, (err) => {
-        if (err) return reject(err);
-        return resolve(true);
-      }),
-    );
+    return remove_file_silently(this.pdf_path);
   }
 
   async make_clip(selection: string) {

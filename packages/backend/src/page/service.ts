@@ -25,19 +25,27 @@ export class PageService {
   ) {}
 
   async add_article(article: iArticle) {
+    const setting = await this.setting.get_setting();
     const entity = await this._page_agg_repo.ensure_entity(
       PageEntity.get_date_title(article.saved_at),
-      this.setting.get_setting(),
+      setting,
     );
-    return entity.add_article(article);
+    await entity.add_article(article);
+    return { status: 1 };
   }
 
-  remove_article(article: iArticle) {
-    throw new NotImplementedException("");
+  async remove_article(article: iArticle) {
+    const setting = await this.setting.get_setting();
+    const entity = await this._page_agg_repo.ensure_entity(
+      PageEntity.get_date_title(article.saved_at),
+      setting,
+    );
+    await entity.remove_article(article);
+    return { status: 1 };
   }
 
   async sync_local_pages() {
-    const setting = this.setting.get_setting();
+    const setting = await this.setting.get_setting();
     const pages_data = await PageAggRepo.sync_local_pages(setting);
     const saved_pages: iPage[] = [];
     for (const page of pages_data) {
@@ -56,14 +64,16 @@ export class PageService {
     return this._page_agg_repo.drop_page_database();
   }
 
-  get_today() {
+  async get_today() {
+    const setting = await this.setting.get_setting();
     return this._page_agg_repo.ensure_entity(
       PageEntity.get_date_title(new Date()),
-      this.setting.get_setting(),
+      setting,
     );
   }
 
-  get_entity(title: string) {
-    return this._page_agg_repo.ensure_entity(title, this.setting.get_setting());
+  async get_entity(title: string) {
+    const setting = await this.setting.get_setting();
+    return this._page_agg_repo.ensure_entity(title, setting);
   }
 }

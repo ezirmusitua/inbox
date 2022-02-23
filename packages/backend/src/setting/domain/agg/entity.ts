@@ -1,6 +1,6 @@
-import * as fs from "fs";
 import * as path from "path";
 import { iSetting } from "@inbox/shared";
+import { ensure_dir, read_file_silently, save_file } from "utils";
 
 export class SettingEntity {
   constructor(private readonly _data: iSetting) {}
@@ -49,29 +49,24 @@ export class SettingEntity {
   }
 
   save_setting() {
-    return fs.writeFileSync(
-      this.setting_path,
-      JSON.stringify(this._data, null, 2),
-    );
+    return save_file(JSON.stringify(this._data, null, 2), this.setting_path);
   }
 
   ensure_setting_dir() {
-    if (!fs.existsSync(this.setting_dir)) {
-      fs.mkdirSync(this.setting_dir);
-    }
+    ensure_dir(this.setting_dir);
   }
 
   save_backend_config() {
     const app_config_dir = `${this._data.device.user_dir}.${this._data.app.name}`;
     const backend_config_path = `${app_config_dir}${path.sep}backend.json`;
-    return fs.writeFileSync(
-      backend_config_path,
+    return save_file(
       JSON.stringify(this._data.backend, null, 2),
+      backend_config_path,
     );
   }
 
-  static read_setting(setting_path: string) {
-    const content = fs.readFileSync(setting_path).toString();
+  static async read_setting(setting_path: string) {
+    const content = await read_file_silently(setting_path);
     return new SettingEntity(JSON.parse(content));
   }
 }

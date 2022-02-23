@@ -44,6 +44,11 @@ export class ArticleAggRepo {
     return this._article_repo.save(data);
   }
 
+  async remove_article(data: iArticle) {
+    await this._clip_repo.delete({ article_id: data._id });
+    return this._article_repo.delete(data._id);
+  }
+
   save_clip(data: iArticleClip) {
     return this._clip_repo.save(data);
   }

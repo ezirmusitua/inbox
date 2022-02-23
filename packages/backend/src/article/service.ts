@@ -34,14 +34,15 @@ export class ArticleService
   ) {}
 
   async onApplicationBootstrap() {
-    const setting = this.setting.get_setting();
+    const setting = await this.setting.get_setting();
     const browser_path = setting.browser_path;
     await new Printer(browser_path).initialize();
     await this.rebuild_database();
   }
 
   async onApplicationShutdown() {
-    const browser_path = this.setting.get_setting().browser_path;
+    const setting = await this.setting.get_setting();
+    const browser_path = setting.browser_path;
     await new Printer(browser_path).destroy();
   }
 
@@ -60,7 +61,7 @@ export class ArticleService
   }
 
   async save(article: SaveArticleDto) {
-    const setting = this.setting.get_setting();
+    const setting = await this.setting.get_setting();
     const entity = await this._article_agg_repo.ensure_entity(article, setting);
     await entity.save(article.content);
     await this.page.add_article(entity.data);
@@ -68,7 +69,7 @@ export class ArticleService
   }
 
   async remove(id: number) {
-    const setting = this.setting.get_setting();
+    const setting = await this.setting.get_setting();
     const entity = await this._article_agg_repo.get_entity(id, setting);
     await entity.remove();
     await this.page.remove_article(entity.data);
@@ -76,7 +77,7 @@ export class ArticleService
   }
 
   async make_clip(dto: MakeSnippetDto) {
-    const setting = this.setting.get_setting();
+    const setting = await this.setting.get_setting();
     const entity = await this._article_agg_repo.ensure_entity(
       { url: dto.url, title: dto.title },
       setting,

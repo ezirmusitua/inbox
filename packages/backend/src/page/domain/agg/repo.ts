@@ -1,8 +1,8 @@
 import { iArticle, iPage } from "@inbox/shared";
 import { NotFoundException } from "@nestjs/common";
-import * as fs from "fs";
 import { SettingEntity } from "setting/domain/agg/entity";
 import { Repository } from "typeorm";
+import { read_dir, read_file_silently } from "utils";
 import { PageAST } from "./ast";
 import { PageEntity } from "./entity";
 
@@ -37,19 +37,8 @@ export class PageAggRepo {
   }
 
   static async sync_local_pages(setting: SettingEntity) {
-    const page_files: Array<{ name: string; path: string }> = await new Promise(
-      (resolve, reject) =>
-        fs.readdir(setting.logseq_page_dir, (err, files) => {
-          if (err) return reject(err);
-          return resolve(
-            files
-              .filter((file) => file.endsWith("-信息列表.md"))
-              .map((name) => ({
-                name,
-                path: setting.logseq_page_path(name),
-              })),
-          );
-        }),
+    const page_files = await read_dir(setting.logseq_page_dir, (file) =>
+      file.endsWith("-信息列表.md"),
     );
     const pages: iPage[] = [];
     for (const page_file of page_files) {
@@ -67,12 +56,7 @@ export class PageAggRepo {
     setting: SettingEntity,
   ) {
     const full_path = setting.logseq_page_path(page_name);
-    if (!fs.existsSync(full_path)) {
-      throw new NotFoundException(`${full_path} not found`);
-    }
-    const content: string = await new Promise((resolve) =>
-      fs.readFile(full_path, (_, data) => resolve(data.toString().trim())),
-    );
+    const content = await read_file_silently(full_path);
     const articles = await PageAST.get_data(content, setting);
     return {
       _id: null,
