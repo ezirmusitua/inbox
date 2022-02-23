@@ -8,7 +8,6 @@ const to = (process.argv[3] || path.join(__dirname, "dist")).trim()
 
 function watch_and_copy() {
   const dist_existed = fse.existsSync(to);
-  console.log("target: ", target)
   if (!dist_existed) {
     fse.mkdirSync(to);
   }
@@ -16,7 +15,6 @@ function watch_and_copy() {
   const watcher = chokidar.watch(target, { ignored: /(^|[\/\\])\../, });
   watcher.on("add", (fp) => {
     const fdp = path.join(to, fp);
-    console.log("copy ", fp, fdp)
     fse.ensureDirSync(path.dirname(fdp))
     if (fse.statSync(fp).isDirectory()) {
       fse.copySync(fp, fdp, { overwrite: true })

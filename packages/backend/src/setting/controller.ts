@@ -16,8 +16,11 @@ export class SettingController {
     return this.service.init_setting(dto);
   }
 
+  // TODO: save setting to database
   @Put("")
   update_setting() {
     return;
   }
+
+  // TODO: move rebuild database to setting module
 }

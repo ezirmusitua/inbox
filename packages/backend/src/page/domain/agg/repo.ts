@@ -13,12 +13,10 @@ export class PageAggRepo {
   ) {}
 
   save_article(article: iArticle) {
-    console.log("save article: ", article);
     return this._article_repo.save(article);
   }
 
   save_page(page: iPage) {
-    console.log("save page: ", page);
     return this._page_repo.save(page);
   }
 
@@ -31,7 +29,6 @@ export class PageAggRepo {
       where: { title },
       relations: ["articles"],
     });
-    console.log("page data: ", data);
     if (!data) {
       data = await this._page_repo.save({ title });
       data.articles = [];

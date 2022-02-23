@@ -1,4 +1,4 @@
-import { iArticle } from "@inbox/shared";
+import { iArticle, iPage } from "@inbox/shared";
 import { Injectable, NotImplementedException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DateTime } from "luxon";
@@ -39,7 +39,7 @@ export class PageService {
   async sync_local_pages() {
     const setting = this.setting.get_setting();
     const pages_data = await PageAggRepo.sync_local_pages(setting);
-    const saved_pages = [];
+    const saved_pages: iPage[] = [];
     for (const page of pages_data) {
       const saved_page = await this._page_agg_repo.save_page({
         title: page.title,

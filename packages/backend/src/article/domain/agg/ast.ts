@@ -116,7 +116,6 @@ export class ArticleAST {
     const article_node = ASTree.parse(content)[0] as iASTreeNode;
     const tags = article_node.children[0].children.reduce(
       (res, { children }) => {
-        console.log(res);
         res[children[0].content] = children[1].content;
         return res;
       },

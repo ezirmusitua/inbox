@@ -89,18 +89,25 @@ export class ArticleService
     await this._article_agg_repo.drop_article_database();
     const pages = await this.page.sync_local_pages();
     const articles = [];
+    // TODO: handle duplicated articles
+    // TODO: do database operation in agg repo
+    const url_set = new Set();
     for (const page of pages) {
       for (const article of page.articles) {
-        const saved_clips = await this._clip_repo.save(
-          article.clips.map((item) => ({
-            ...item,
-            note: (item.note as any).join("\n"),
-          })),
-        );
-        article.page = page;
-        article.clips = saved_clips;
-        article._url_hash = hash(article.url);
-        articles.push(article);
+        const _url_hash = hash(article.url);
+        if (!url_set.has(_url_hash)) {
+          url_set.add(_url_hash);
+          const saved_clips = await this._clip_repo.save(
+            article.clips.map((item) => ({
+              ...item,
+              note: (item.note as any).join("\n"),
+            })),
+          );
+          article.page = page;
+          article.clips = saved_clips;
+          article._url_hash = _url_hash;
+          articles.push(article);
+        }
       }
     }
     await this._article_repo.save(articles);
