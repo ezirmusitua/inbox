@@ -72,6 +72,7 @@ export class ArticleService
     const setting = await this.setting.get_setting();
     const entity = await this._article_agg_repo.get_entity(id, setting);
     await entity.remove();
+    console.log("remove ", id);
     await this.page.remove_article(entity.data);
     return { status: 1 };
   }

@@ -12,7 +12,7 @@ export default function ArticleList({
     on_remove,
 }: iArticleListProps) {
     async function remove_item(item) {
-        await article.remove_article(item._url_hash);
+        await article.remove_article(item._id);
         on_remove(item);
     }
     return (

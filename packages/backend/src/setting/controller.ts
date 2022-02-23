@@ -1,5 +1,6 @@
 import { InitSettingDto } from "@inbox/shared";
 import { Body, Controller, Get, Post, Put } from "@nestjs/common";
+import { UpdateSettingDto } from "./dto";
 import { SettingService } from "./service";
 
 @Controller("api/setting")
@@ -16,10 +17,9 @@ export class SettingController {
     return this.service.init_setting(dto);
   }
 
-  // TODO: save setting to database
   @Put("")
-  update_setting() {
-    return;
+  update_setting(@Body() dto: UpdateSettingDto) {
+    return this.service.update_setting(dto);
   }
 
   // TODO: move rebuild database to setting module

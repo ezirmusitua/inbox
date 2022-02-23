@@ -1,9 +1,13 @@
-import * as path from "path";
 import { iSetting } from "@inbox/shared";
-import { ensure_dir, read_file_silently, save_file } from "utils";
+import * as path from "path";
+import { ensure_dir, save_file } from "utils";
+import { SettingAggRepo } from "./repo";
 
 export class SettingEntity {
-  constructor(private readonly _data: iSetting) {}
+  constructor(
+    private readonly _data: iSetting,
+    private readonly _repo: SettingAggRepo,
+  ) {}
 
   get setting_dir() {
     return path.join(this._data.device.document_dir, `.${this._data.app.name}`);
@@ -40,20 +44,22 @@ export class SettingEntity {
     this._data.device = setting.device;
     this._data._update_at = new Date();
     this._data._version = (this._data._version || 0) + 1;
+    return this.save_setting();
   }
 
-  init_setting() {
-    this.ensure_setting_dir();
-    this.save_backend_config();
-    this.save_setting();
+  async init_setting() {
+    await this.ensure_setting_dir();
+    await this.save_backend_config();
+    return this.save_setting();
   }
 
-  save_setting() {
+  async save_setting() {
+    this._repo.save_setting(this._data);
     return save_file(JSON.stringify(this._data, null, 2), this.setting_path);
   }
 
   ensure_setting_dir() {
-    ensure_dir(this.setting_dir);
+    return ensure_dir(this.setting_dir);
   }
 
   save_backend_config() {
@@ -63,10 +69,5 @@ export class SettingEntity {
       JSON.stringify(this._data.backend, null, 2),
       backend_config_path,
     );
-  }
-
-  static async read_setting(setting_path: string) {
-    const content = await read_file_silently(setting_path);
-    return new SettingEntity(JSON.parse(content));
   }
 }

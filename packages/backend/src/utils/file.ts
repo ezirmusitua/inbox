@@ -105,7 +105,12 @@ export function read_dir(
 }
 
 export function ensure_dir(dir: string) {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir);
-  }
+  // TODO: enable mkdir recursively
+  if (fs.existsSync(dir)) return;
+  return new Promise((resolve, reject) =>
+    fs.mkdir(dir, (err) => {
+      if (err) return reject(err);
+      return resolve(true);
+    }),
+  );
 }
