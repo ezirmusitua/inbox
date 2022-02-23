@@ -26,7 +26,7 @@ export class PageService {
 
   async add_article(article: iArticle) {
     const entity = await this._page_agg_repo.ensure_entity(
-      PageEntity.get_date_label(article.saved_at),
+      PageEntity.get_date_title(article.saved_at),
       this.setting.get_setting(),
     );
     return entity.add_article(article);

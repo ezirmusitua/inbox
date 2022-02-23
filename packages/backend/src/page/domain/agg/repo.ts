@@ -2,7 +2,7 @@ import { iArticle, iPage } from "@inbox/shared";
 import { NotFoundException } from "@nestjs/common";
 import * as fs from "fs";
 import { SettingEntity } from "setting/domain/agg/entity";
-import { In, Not, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { PageAST } from "./ast";
 import { PageEntity } from "./entity";
 

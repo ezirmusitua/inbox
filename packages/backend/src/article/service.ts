@@ -52,7 +52,11 @@ export class ArticleService
 
   async list_today() {
     const entity = await this.page.get_today();
-    return { data: entity.data, status: 1 };
+    const items = entity.articles.data;
+    return {
+      data: { items, total: items.length },
+      status: 1,
+    };
   }
 
   async save(article: SaveArticleDto) {
