@@ -31,13 +31,6 @@ export const init_state: iTodayState = {
 export function reducer(state: iTodayState, action: iAction) {
     switch (action.type) {
         case eActionType.CHANGE_ITEMS:
-            console.log(
-                "today change items: ",
-                action.payload.map((i) => ({
-                    ...i,
-                    saved_at: new Date(i.saved_at),
-                })),
-            );
             const items = action.payload.map((i) => ({
                 ...i,
                 saved_at: new Date(i.saved_at),
@@ -50,12 +43,12 @@ export function reducer(state: iTodayState, action: iAction) {
     }
 }
 
-export interface iTodayContextValue {
+export interface iContextValue {
     state: iTodayState;
     dispatch: React.Dispatch<iAction>;
 }
 
-export const TodayContext = createContext({
+export default createContext({
     state: init_state,
-    dispatch: (action: iAction) => {},
+    dispatch: (_: iAction) => null as any,
 });

@@ -1,16 +1,19 @@
+import ArticlePage from "pages/Article";
+import SettingPage from "pages/Setting";
+import TodayPage from "pages/Today";
 import { useEffect, useReducer } from "react";
 import { Route, Routes } from "react-router-dom";
-import AppAction from "./App.action";
-import { AppContext, init_state, reducer } from "./App.store";
-import TodayPage from "./pages/Today";
-import SettingPage from "./pages/Setting";
-import ArticlePage from "./pages/Article";
+import { init_app } from "./App.action";
+import { AppContext, eActionType, init_state, reducer } from "./App.store";
 
 function App() {
     const [state, dispatch] = useReducer(reducer, init_state);
-    const app_action = new AppAction({ state, dispatch });
     useEffect(() => {
-        app_action.init();
+        init_app();
+        dispatch({
+            type: eActionType.CHANGE_INITIALIZED,
+            payload: true,
+        });
     }, []);
 
     return (

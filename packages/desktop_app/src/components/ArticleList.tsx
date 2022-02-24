@@ -1,6 +1,6 @@
-import { iDayArticleData } from "pages/Today.store";
 import { DateTime } from "luxon";
-import { article } from "resource/article";
+import { iDayArticleData } from "pages/Today/context";
+import article from "resource/article";
 
 export interface iArticleListProps extends iDayArticleData {
     on_remove: (article: any) => Promise<void>;
@@ -39,6 +39,7 @@ export default function ArticleList({
                         <a
                             href={article.url}
                             target="_blank"
+                            rel="noreferrer"
                             className="text-xl underline underline-offset-8 hover:text-gray-900 text-gray-700"
                         >
                             {article.title}

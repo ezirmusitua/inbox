@@ -1,23 +1,17 @@
 import ArticleList from "components/ArticleList";
 import Layout from "components/Layout";
 import { useEffect, useReducer } from "react";
-import ArticleAction from "./Article.action";
-import {
-    ArticleContext,
-    eActionType,
-    init_state,
-    reducer,
-} from "./Article.store";
+import { init } from "./action";
+import context, { eActionType, init_state, reducer } from "./context";
 
 export default function ArticlePage() {
     const [state, dispatch] = useReducer(reducer, init_state);
-    const article_action = new ArticleAction({ state, dispatch });
     useEffect(() => {
-        article_action.init();
-    }, []);
+        init({ state, dispatch });
+    });
     return (
         <Layout>
-            <ArticleContext.Provider value={{ state, dispatch }}>
+            <context.Provider value={{ state, dispatch }}>
                 <ArticleList
                     title="汇总信息列表"
                     items={state.items}
@@ -30,7 +24,7 @@ export default function ArticlePage() {
                         }) as any
                     }
                 ></ArticleList>
-            </ArticleContext.Provider>
+            </context.Provider>
         </Layout>
     );
 }

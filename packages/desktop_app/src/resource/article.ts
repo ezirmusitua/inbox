@@ -1,6 +1,6 @@
 import { del, get } from "./fetch";
 
-export const article = {
+const article = {
     list() {
         return get({ url: "api/article" });
     },
@@ -13,3 +13,5 @@ export const article = {
         return del({ url: `api/article/:_url_hash`, params: { _url_hash } });
     },
 };
+
+export default article;

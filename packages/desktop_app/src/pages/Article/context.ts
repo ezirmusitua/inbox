@@ -24,9 +24,9 @@ export const init_state: iArticleState = {
 export function reducer(state: iArticleState, action: iAction) {
     switch (action.type) {
         case eActionType.CHANGE_ITEMS:
-            const items = action.payload.map((i) => ({
-                ...i,
-                saved_at: new Date(i.saved_at),
+            const items = action.payload.map((article) => ({
+                ...article,
+                saved_at: new Date(article.saved_at),
             }));
             return { ...state, items };
         case eActionType.CHANGE_INITIALIZED:
@@ -36,12 +36,12 @@ export function reducer(state: iArticleState, action: iAction) {
     }
 }
 
-export interface iArticleContextValue {
+export interface iContextValue {
     state: iArticleState;
     dispatch: React.Dispatch<iAction>;
 }
 
-export const ArticleContext = createContext({
+export default createContext({
     state: init_state,
-    dispatch: (action: iAction) => {},
+    dispatch: (_: iAction) => null as any,
 });

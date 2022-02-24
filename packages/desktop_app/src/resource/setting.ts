@@ -1,7 +1,7 @@
 import { InitSettingDto } from "@inbox/shared";
 import { get, post, put } from "./fetch";
 
-const SettingService = {
+const setting = {
     get_setting() {
         return get({ url: "api/setting" });
     },
@@ -15,4 +15,4 @@ const SettingService = {
     },
 };
 
-export default SettingService;
+export default setting;
