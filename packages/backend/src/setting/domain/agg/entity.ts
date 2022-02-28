@@ -1,4 +1,4 @@
-import { iSetting } from "@inbox/shared";
+import { iBackendSetting, iLogseqSetting, iSetting } from "@inbox/shared";
 import * as path from "path";
 import { ensure_dir, save_file } from "utils";
 import { SettingAggRepo } from "./repo";
@@ -8,6 +8,10 @@ export class SettingEntity {
     private readonly _data: iSetting,
     private readonly _repo: SettingAggRepo,
   ) {}
+
+  get data() {
+    return this._data;
+  }
 
   get setting_dir() {
     return path.join(this._data.device.document_dir, `.${this._data.app.name}`);
@@ -37,11 +41,21 @@ export class SettingEntity {
     return this._data.backend.browser_bin;
   }
 
-  update_setting(setting: iSetting) {
-    this._data.logseq = setting.logseq;
-    this._data.backend = setting.backend;
-    this._data.app = setting.app;
-    this._data.device = setting.device;
+  update_backend_setting(setting: iBackendSetting) {
+    this._data.backend = {
+      ...this._data.backend,
+      port: parseInt(setting.port as string, 10),
+      browser_bin: setting.browser_bin, // TODO: check exists and executable
+    };
+    this._data._update_at = new Date();
+    this._data._version = (this._data._version || 0) + 1;
+    return this.save_setting();
+  }
+
+  update_logseq_setting(setting: iLogseqSetting) {
+    this._data.logseq = {
+      root: setting.root,
+    };
     this._data._update_at = new Date();
     this._data._version = (this._data._version || 0) + 1;
     return this.save_setting();

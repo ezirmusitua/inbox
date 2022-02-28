@@ -35,6 +35,7 @@ export default {
             return null;
         }
     },
+
     async prepare_initialization_dto() {
         const document_dir = await path.documentDir();
         const user_dir = await path.homeDir();

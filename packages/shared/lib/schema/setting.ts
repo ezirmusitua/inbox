@@ -1,13 +1,12 @@
 import { iBase } from "./base";
 
-
 export interface iBackendSetting {
-    port: string;
-    host: string;
-    db_type: string;
-    db_database: string;
-    jwt_secret: string;
-    jwt_expires: string;
+    port: number | string;
+    host?: string;
+    db_type?: string;
+    db_database?: string;
+    jwt_secret?: string;
+    jwt_expires?: string;
     browser_bin: string;
 }
 

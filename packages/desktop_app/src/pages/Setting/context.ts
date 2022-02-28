@@ -21,26 +21,31 @@ export const init_state: iSettingState = {
     setting: {} as iSetting,
 };
 
+function change_setting_field(
+    state: iSettingState,
+    field: string,
+    payload: Record<string, any>,
+) {
+    return {
+        ...state,
+        setting: {
+            ...state.setting,
+            backend: {
+                ...state.setting[field],
+                ...payload,
+            },
+        },
+    };
+}
+
 export function reducer(state: iSettingState, action: iAction) {
     switch (action.type) {
         case eActionType.INITIALIZE:
             return { ...state, setting: action.payload };
         case eActionType.CHANGE_BACKEND:
-            return {
-                ...state,
-                setting: {
-                    ...state.setting,
-                    backend: action.payload,
-                },
-            };
+            return change_setting_field(state, "backend", action.payload);
         case eActionType.CHANGE_LOGSEQ:
-            return {
-                ...state,
-                setting: {
-                    ...state.setting,
-                    logseq: action.payload,
-                },
-            };
+            return change_setting_field(state, "logseq", action.payload);
         default:
             return { ...state };
     }

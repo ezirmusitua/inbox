@@ -18,7 +18,6 @@ export async function init_app() {
         dto.logseq.root = (await dialog.open({
             directory: true,
         })) as string;
-
         backend_config = dto.backend;
     }
     await backend.start_backend(backend_config);

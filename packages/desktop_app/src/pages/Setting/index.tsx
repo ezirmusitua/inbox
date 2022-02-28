@@ -1,12 +1,28 @@
 import Layout from "components/Layout";
-import { useReducer } from "react";
-import context, { reducer, init_state } from "./context";
+import { useEffect, useReducer } from "react";
+import setting from "resource/setting";
+import Backend from "./components/Backend";
+import Logseq from "./components/Logseq";
+import context, { eActionType, init_state, reducer } from "./context";
 
 export default function SettingPage() {
     const [state, dispatch] = useReducer(reducer, init_state);
+    useEffect(() => {
+        (async () => {
+            try {
+                const data = await setting.get_setting();
+                dispatch({ type: eActionType.INITIALIZE, payload: data.data });
+            } catch (e) {
+                console.log(e);
+            }
+        })();
+    }, []);
     return (
         <Layout>
-            <context.Provider value={{ state, dispatch }}></context.Provider>
+            <context.Provider value={{ state, dispatch }}>
+                <Backend></Backend>
+                <Logseq></Logseq>
+            </context.Provider>
         </Layout>
     );
 }

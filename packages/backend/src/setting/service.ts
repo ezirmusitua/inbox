@@ -1,4 +1,8 @@
-import { InitSettingDto } from "@inbox/shared";
+import {
+  InitSettingDto,
+  UpdateBackendSettingDto,
+  UpdateLogseqSettingDto,
+} from "@inbox/shared";
 import { Injectable, OnApplicationBootstrap } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { sSetting } from "schema/setting";
@@ -32,9 +36,15 @@ export class SettingService implements OnApplicationBootstrap {
     return { status: 1 };
   }
 
-  async update_setting(dto: UpdateSettingDto) {
+  async update_backend_setting(dto: UpdateBackendSettingDto) {
     const entity = await this._agg_repo.get_entity();
-    await entity.update_setting(dto);
+    await entity.update_backend_setting(dto);
+    return { status: 1 };
+  }
+
+  async update_logseq_setting(dto: UpdateLogseqSettingDto) {
+    const entity = await this._agg_repo.get_entity();
+    await entity.update_logseq_setting(dto);
     return { status: 1 };
   }
 
