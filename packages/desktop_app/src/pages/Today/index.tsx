@@ -10,7 +10,7 @@ export default function TodayPage() {
     const title = DateTime.now().toFormat("dd, MMMM yyyy");
     useEffect(() => {
         init({ state, dispatch });
-    });
+    }, []);
     return (
         <Layout>
             <context.Provider value={{ state, dispatch }}>
