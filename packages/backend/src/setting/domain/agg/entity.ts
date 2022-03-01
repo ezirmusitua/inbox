@@ -1,6 +1,7 @@
 import { iBackendSetting, iLogseqSetting, iSetting } from "@inbox/shared";
 import * as path from "path";
 import { ensure_dir, save_file } from "utils";
+import { BackendSettingValueGuard, LogseqSettingValueGuard } from "./guard";
 import { SettingAggRepo } from "./repo";
 
 export class SettingEntity {
@@ -41,18 +42,20 @@ export class SettingEntity {
     return this._data.backend.browser_bin;
   }
 
-  update_backend_setting(setting: iBackendSetting) {
+  async update_backend_setting(setting: iBackendSetting) {
+    await new BackendSettingValueGuard().validate(setting);
     this._data.backend = {
       ...this._data.backend,
       port: parseInt(setting.port as string, 10),
-      browser_bin: setting.browser_bin, // TODO: check exists and executable
+      browser_bin: setting.browser_bin,
     };
     this._data._update_at = new Date();
     this._data._version = (this._data._version || 0) + 1;
     return this.save_setting();
   }
 
-  update_logseq_setting(setting: iLogseqSetting) {
+  async update_logseq_setting(setting: iLogseqSetting) {
+    await new LogseqSettingValueGuard().validate(setting);
     this._data.logseq = {
       root: setting.root,
     };

@@ -1,3 +1,4 @@
+import { NotFoundException } from "@nestjs/common";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -113,4 +114,33 @@ export function ensure_dir(dir: string) {
       return resolve(true);
     }),
   );
+}
+
+export function fstat(fp: string): Promise<fs.Stats> {
+  if (!fs.existsSync(fp)) {
+    throw new NotFoundException("文件不存在");
+  }
+  return new Promise((resolve, reject) =>
+    fs.stat(fp, (err, stat) => {
+      if (err) return reject(err);
+      return resolve(stat);
+    }),
+  );
+}
+
+export async function check_user_permission(fp: string, mask: number) {
+  const stat = await fstat(fp);
+  return !!(mask & parseInt((stat.mode & parseInt("777", 8)).toString(8)[0]));
+}
+
+export async function can_user_execute(fp: string) {
+  return check_user_permission(fp, 1);
+}
+
+export async function can_user_read(fp: string) {
+  return check_user_permission(fp, 4);
+}
+
+export async function can_user_write(fp: string) {
+  return check_user_permission(fp, 2);
 }
