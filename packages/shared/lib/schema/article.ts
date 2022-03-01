@@ -1,6 +1,5 @@
 import { iPage } from ".";
 import { iBase } from "./base";
-import { tPageId } from "./page";
 
 export type tArticleId = number;
 export type tArticleClipId = number;

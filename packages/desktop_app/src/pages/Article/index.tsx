@@ -8,7 +8,7 @@ export default function ArticlePage() {
     const [state, dispatch] = useReducer(reducer, init_state);
     useEffect(() => {
         init({ state, dispatch });
-    });
+    }, []);
     return (
         <Layout>
             <context.Provider value={{ state, dispatch }}>
