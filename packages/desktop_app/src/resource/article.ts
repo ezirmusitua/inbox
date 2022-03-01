@@ -1,4 +1,4 @@
-import { del, get } from "./fetch";
+import { del, get, post } from "./fetch";
 
 const article = {
     list() {
@@ -11,6 +11,10 @@ const article = {
 
     remove_article(_url_hash: string) {
         return del({ url: `api/article/:_url_hash`, params: { _url_hash } });
+    },
+
+    rebuild_database() {
+        return post({ url: "api/article/database", data: {} });
     },
 };
 
