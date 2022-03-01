@@ -20,10 +20,7 @@ export default function FormField({ id, label, name, as = null }) {
                         ? "border-blue-500 outline-blue-500"
                         : "border-gray-200"
                 } border py-1 px-2 rounded-md text-gray-700 bg-blue-50`}
-                onFocus={() => {
-                    console.log("focus");
-                    set_state({ focusing: true });
-                }}
+                onFocus={() => set_state({ focusing: true })}
                 onBlur={() => set_state({ focusing: false })}
                 id={id}
                 name={name}

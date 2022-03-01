@@ -36,7 +36,6 @@ export class ArticleController {
 
   @Post("/clip")
   take_clip(@Body() dto: TakeClipDto) {
-    console.log("call make_clip: ", dto);
     return this.service.take_clip(dto);
   }
 

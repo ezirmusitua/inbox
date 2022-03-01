@@ -30,7 +30,6 @@ export default class ReadingModeList {
   }
 
   get_mode_def(mode: string) {
-    console.log(this._list.find((item) => item.id === mode));
     return this._list.find((item) => item.id === mode);
   }
 }

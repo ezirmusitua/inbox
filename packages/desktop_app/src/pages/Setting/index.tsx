@@ -10,12 +10,8 @@ export default function SettingPage() {
     const [state, dispatch] = useReducer(reducer, init_state);
     useEffect(() => {
         (async () => {
-            try {
-                const data = await setting.get_setting();
-                dispatch({ type: eActionType.INITIALIZE, payload: data.data });
-            } catch (e) {
-                console.log(e);
-            }
+            const data = await setting.get_setting();
+            dispatch({ type: eActionType.INITIALIZE, payload: data.data });
         })();
     }, []);
     return (

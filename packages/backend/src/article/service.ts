@@ -117,7 +117,6 @@ export class ArticleService
         }
         return res;
       }, {} as Record<string, iArticle>);
-    console.log("to insert article: ", uniq_articles);
     await this._article_agg_repo.save_articles(
       Object.keys(uniq_articles).map((key) => uniq_articles[key]),
     );

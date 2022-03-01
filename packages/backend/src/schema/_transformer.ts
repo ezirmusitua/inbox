@@ -8,7 +8,6 @@ export class JSONTransformer implements ValueTransformer {
     try {
       return JSON.stringify(value);
     } catch (e) {
-      console.error(e);
       return this.default_value;
     }
   }
