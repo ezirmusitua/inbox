@@ -1,20 +1,18 @@
-import { Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import { useContext } from "react";
-import { put } from "resource/fetch";
 import setting from "resource/setting";
-import context, { eActionType } from "../context";
+import context from "../context";
 import FormField from "./FormField";
 import FsPicker from "./FsPicker";
+import Section from "./Section";
 import Submit from "./Submit";
-import Title from "./Title";
 
 export default function Backend() {
-    const { state, dispatch } = useContext(context);
+    const { state } = useContext(context);
     if (!state.setting || !state.setting.backend) return null;
 
     return (
-        <div className="pb-4">
-            <Title>服务设置</Title>
+        <Section title="服务设置">
             <Formik
                 initialValues={{ ...state.setting.backend }}
                 onSubmit={(values) => setting.update_backend_setting(values)}
@@ -34,6 +32,6 @@ export default function Backend() {
                     <Submit></Submit>
                 </Form>
             </Formik>
-        </div>
+        </Section>
     );
 }

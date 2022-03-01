@@ -1,18 +1,17 @@
 import { Form, Formik } from "formik";
 import { useContext } from "react";
 import setting from "resource/setting";
-import context, { eActionType } from "../context";
+import context from "../context";
 import FormField from "./FormField";
 import FsPicker from "./FsPicker";
+import Section from "./Section";
 import Submit from "./Submit";
-import Title from "./Title";
 
 export default function Logseq() {
     const { state } = useContext(context);
     if (!state.setting || !state.setting.logseq) return null;
     return (
-        <div>
-            <Title>Logseq</Title>
+        <Section title="Logseq">
             <Formik
                 initialValues={{ ...state.setting.logseq }}
                 onSubmit={(values) => setting.update_logseq_setting(values)}
@@ -27,6 +26,6 @@ export default function Logseq() {
                     <Submit></Submit>
                 </Form>
             </Formik>
-        </div>
+        </Section>
     );
 }

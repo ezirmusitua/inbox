@@ -2,6 +2,7 @@ import Layout from "components/Layout";
 import { useEffect, useReducer } from "react";
 import setting from "resource/setting";
 import Backend from "./components/Backend";
+import Database from "./components/Database";
 import Logseq from "./components/Logseq";
 import context, { eActionType, init_state, reducer } from "./context";
 
@@ -22,6 +23,7 @@ export default function SettingPage() {
             <context.Provider value={{ state, dispatch }}>
                 <Backend></Backend>
                 <Logseq></Logseq>
+                <Database></Database>
             </context.Provider>
         </Layout>
     );

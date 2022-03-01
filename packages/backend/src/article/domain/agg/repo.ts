@@ -40,8 +40,18 @@ export class ArticleAggRepo {
   }
 
   async save_article(data: iArticle) {
-    await this._clip_repo.save(data.clips);
-    return this._article_repo.save(data);
+    const [saved] = await this.save_articles([data]);
+    return saved;
+  }
+
+  async save_articles(data: iArticle[]) {
+    const to_save = [];
+    for (const article of data) {
+      const clips = await this._clip_repo.save(article.clips);
+      article.clips = clips;
+      to_save.push(article);
+    }
+    return this._article_repo.save(to_save);
   }
 
   async remove_article(data: iArticle) {
@@ -50,6 +60,10 @@ export class ArticleAggRepo {
   }
 
   save_clip(data: iArticleClip) {
+    return this._clip_repo.save(data);
+  }
+
+  save_clips(data: iArticleClip[]) {
     return this._clip_repo.save(data);
   }
 

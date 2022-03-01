@@ -30,6 +30,4 @@ export class SettingController {
   update_logseq_setting(@Body() dto: UpdateLogseqSettingDto) {
     return this.service.update_logseq_setting(dto);
   }
-
-  // TODO: move rebuild database to setting module
 }

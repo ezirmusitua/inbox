@@ -1,10 +1,11 @@
 import { Field } from "formik";
 import { useState } from "react";
+import FieldContainer from "./FieldContainer";
 
 export default function FormField({ id, label, name, as = null }) {
     const [state, set_state] = useState({ focusing: false });
     return (
-        <div className="py-2 flex flex-col">
+        <FieldContainer>
             <label
                 className={`text-md text-gray-600 py-1 ${
                     state.focusing ? "font-bold" : ""
@@ -28,6 +29,6 @@ export default function FormField({ id, label, name, as = null }) {
                 name={name}
                 as={as}
             ></Field>
-        </div>
+        </FieldContainer>
     );
 }

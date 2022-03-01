@@ -40,7 +40,7 @@ export class ArticleController {
   }
 
   @Post("/database")
-  refresh_database() {
+  rebuild_database() {
     return this.service.rebuild_database();
   }
 }

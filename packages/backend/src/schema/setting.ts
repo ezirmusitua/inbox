@@ -6,28 +6,9 @@ import {
   iServiceSetting,
   iSetting,
 } from "@inbox/shared";
-import { Column, Entity, ValueTransformer } from "typeorm";
+import { Column, Entity } from "typeorm";
 import { sBase } from "./base";
-
-class JSONTransformer implements ValueTransformer {
-  to(value: Record<string, any>) {
-    if (typeof value === "string") return value;
-    try {
-      return JSON.stringify(value);
-    } catch (e) {
-      console.error(e);
-      return {};
-    }
-  }
-  from(value: string) {
-    try {
-      return JSON.parse(value);
-    } catch (e) {
-      console.log("from: ", value, e);
-      return "{}";
-    }
-  }
-}
+import { JSONTransformer } from "./_transformer";
 
 @Entity("setting")
 export class sSetting extends sBase implements iSetting {
