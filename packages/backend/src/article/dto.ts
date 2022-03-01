@@ -4,7 +4,7 @@ export class SaveArticleDto {
   public readonly content: string;
 }
 
-export class MakeSnippetDto {
+export class TakeClipDto {
   public readonly url: string;
   public readonly title: string;
   public readonly selection: string;

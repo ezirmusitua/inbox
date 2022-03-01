@@ -13,7 +13,7 @@ import { Repository } from "typeorm";
 import { hash } from "utils";
 import { Printer } from "./domain/agg/pdf";
 import { ArticleAggRepo } from "./domain/agg/repo";
-import { MakeSnippetDto, SaveArticleDto } from "./dto";
+import { TakeClipDto, SaveArticleDto } from "./dto";
 
 @Injectable()
 export class ArticleService
@@ -75,7 +75,7 @@ export class ArticleService
     return { status: 1 };
   }
 
-  async make_clip(dto: MakeSnippetDto) {
+  async take_clip(dto: TakeClipDto) {
     const setting = await this.setting.get_setting();
     const entity = await this._article_agg_repo.ensure_entity(
       { url: dto.url, title: dto.title },

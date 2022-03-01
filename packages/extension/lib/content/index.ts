@@ -93,7 +93,6 @@ try {
   cs.register(new EventHandler());
   cs.mount_view(api);
   // FIXME: move to patch
-  // fix uisdc html font-size
   // eslint-disable-next-line
   if (location.href.includes("uisdc.com")) {
     document.querySelector("html").style.fontSize = "14px";

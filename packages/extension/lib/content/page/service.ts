@@ -1,6 +1,8 @@
 export default class Service {
   static instance = null as any;
+
   private _api = {} as any;
+
   constructor() {
     if (!Service.instance) {
       Service.instance = this;

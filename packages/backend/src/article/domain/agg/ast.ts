@@ -85,7 +85,7 @@ export class ArticleAST {
                 },
               ],
             },
-            ...JSON.parse(note as any).map((text: string) => ({
+            ...note.map((text: string) => ({
               type: eTokenType.LINE,
               children: [
                 {

@@ -7,7 +7,7 @@ import {
   ParseIntPipe,
   Post,
 } from "@nestjs/common";
-import { MakeSnippetDto, SaveArticleDto } from "./dto";
+import { TakeClipDto, SaveArticleDto } from "./dto";
 import { ArticleService } from "./service";
 
 @Controller("api/article")
@@ -35,8 +35,9 @@ export class ArticleController {
   }
 
   @Post("/clip")
-  make_clip(@Body() dto: MakeSnippetDto) {
-    return this.service.make_clip(dto);
+  take_clip(@Body() dto: TakeClipDto) {
+    console.log("call make_clip: ", dto);
+    return this.service.take_clip(dto);
   }
 
   @Post("/database")

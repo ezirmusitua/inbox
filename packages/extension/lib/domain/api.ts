@@ -47,10 +47,11 @@ export default {
     }
   },
 
-  async make_snippet(url: string, title: string, selection: string) {
-    console.log("call make snippet");
+  async take_clip(url: string, title: string, selection: string) {
     try {
-      await fetch("http://localhost:31312/api/article/snippet", {
+      // TODO: load from settings
+      // TODO: only allowed for saved article
+      await fetch("http://localhost:31312/api/article/clip", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url, title, selection }),

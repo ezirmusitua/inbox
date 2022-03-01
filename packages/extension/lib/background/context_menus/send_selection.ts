@@ -1,4 +1,4 @@
-import { make_snippet } from "../actions";
+import { take_clip } from "../actions";
 import Repo from "../repo";
 
 export const SEND_SELECTION_MENU_ITEM_ID = "_inbox_send_selection";
@@ -18,6 +18,6 @@ export class SendSelectionHandler {
 
   handle(info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab) {
     const { selectionText, pageUrl } = info;
-    return make_snippet(pageUrl, tab.title, selectionText);
+    return take_clip(pageUrl, tab.title, selectionText);
   }
 }

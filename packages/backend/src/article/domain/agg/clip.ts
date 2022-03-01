@@ -21,6 +21,6 @@ export class Clip {
   }
 
   static create(content: string, article: iArticle, repo: ArticleAggRepo) {
-    return new Clip({ content, article }, repo).save();
+    return new Clip({ content, article, note: [] }, repo).save();
   }
 }
